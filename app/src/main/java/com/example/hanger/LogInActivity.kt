@@ -7,6 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
+/*
+Learnt about Firebase and Login Activity from ->
+https://www.youtube.com/watch?v=gaykE36N7PY
+ */
+
 class LogInActivity : AppCompatActivity() {
 
     private lateinit var email: EditText

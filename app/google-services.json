@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "669792353650",
+    "project_id": "hanger-2ca03",
+    "storage_bucket": "hanger-2ca03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669792353650:android:a3f697f5581fe1780b31eb",
+        "android_client_info": {
+          "package_name": "com.example.hanger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669792353650-0ldjm8robtt1mugssgdhpa9890akkltt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmSPJiJJOm-NiB6EEmVFRt8R2ll7ol_yQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669792353650-0ldjm8robtt1mugssgdhpa9890akkltt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

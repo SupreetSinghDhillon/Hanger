@@ -114,7 +114,7 @@ class RegisterUserActivity : AppCompatActivity() {
 
                             database.push().setValue(user)
 
-                            var intent: Intent = Intent(this, HangerActivity::class.java)
+                            var intent: Intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
 
                         } else {

@@ -103,7 +103,7 @@ class LogInActivity : AppCompatActivity() {
 
                         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
 
-                                var intent: Intent = Intent(this, HangerActivity::class.java)
+                                var intent: Intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                         }
 

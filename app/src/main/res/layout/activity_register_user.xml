@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/signUpTextView"
+            android:id="@+id/profileTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -23,7 +23,7 @@
         android:id="@+id/editTextTextPersonName"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/signUpTextView"
+        android:layout_below="@+id/profileTextView"
         android:layout_marginBottom="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

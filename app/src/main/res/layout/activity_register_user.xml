@@ -10,10 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/signUpTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/aguafina_script"
+            android:text="Sign Up"
+            android:textSize="44sp" />
+
     <EditText
         android:id="@+id/editTextTextPersonName"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
+        android:layout_below="@+id/signUpTextView"
         android:layout_marginBottom="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,6 +82,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_height="wrap_content" />
+
+
 
     </RelativeLayout>
 </ScrollView>

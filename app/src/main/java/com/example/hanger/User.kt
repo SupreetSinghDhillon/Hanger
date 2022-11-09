@@ -7,9 +7,9 @@ class User {
 
     var name: String = ""
     var email: String = ""
-    var phoneNumber: Int = 0
+    var phoneNumber: String = ""
 
-    fun createUser(nameOfUser: String,emailOfUser: String, phone: Int)
+    fun createUser(nameOfUser: String,emailOfUser: String, phone: String)
     {
         name = nameOfUser
         email = emailOfUser

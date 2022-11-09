@@ -48,7 +48,7 @@ class LogInActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         imageView = findViewById(R.id.imageView2)
-        imageView.setImageResource(R.drawable.hanger)
+        imageView.setImageResource(R.drawable.logo)
         forgotPassword = findViewById(R.id.forgotPasswordTextView)
 
         register = findViewById(R.id.registerTextView)
@@ -97,7 +97,6 @@ class LogInActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
             }
-
                 //progressDialog.visibility = View.VISIBLE
                 auth.signInWithEmailAndPassword(emailInput, passwordInput).addOnCompleteListener {
 
@@ -110,7 +109,7 @@ class LogInActivity : AppCompatActivity() {
                         }
 
                      else {
-                        Toast.makeText(this, "Error" + it.exception, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Please enter correct Email and Password" , Toast.LENGTH_SHORT).show()
                     }
                 }
             }

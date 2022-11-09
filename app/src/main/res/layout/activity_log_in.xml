@@ -16,24 +16,11 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
         android:layout_marginTop="25dp"
         tools:src="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/appTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hanger"
-        android:layout_below="@+id/imageView2"
-        android:layout_marginTop="25dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:gravity="center"
-        android:textSize="48sp"
-        tools:layout_editor_absoluteX="109dp"
-        tools:layout_editor_absoluteY="155dp" />
-
-    <EditText
+        <EditText
         android:id="@+id/editTextTextEmailAddress"
         android:hint="Email Address"
         android:layout_width="wrap_content"
@@ -41,7 +28,7 @@
         android:layout_marginBottom="25dp"
         android:layout_centerHorizontal="true"
         android:ems="10"
-        android:layout_below="@id/appTitle"
+        android:layout_below="@id/imageView2"
         android:inputType="textEmailAddress" />
 
     <EditText

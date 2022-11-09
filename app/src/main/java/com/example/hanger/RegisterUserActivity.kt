@@ -4,14 +4,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintSet.VISIBLE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.core.view.View
 
 class RegisterUserActivity : AppCompatActivity() {
 
@@ -20,7 +23,7 @@ class RegisterUserActivity : AppCompatActivity() {
     private lateinit var phoneNumber: EditText
     private lateinit var password: EditText
     private lateinit var register: Button
-    private lateinit var progressDialog: ProgressBar
+    private lateinit var progressBar: ProgressBar
     private lateinit var database: DatabaseReference
 
 
@@ -53,7 +56,7 @@ class RegisterUserActivity : AppCompatActivity() {
         phoneNumber = findViewById(R.id.editTextNumber)
         password = findViewById(R.id.editTextTextPassword2)
         register = findViewById(R.id.button2)
-        progressDialog = findViewById<ProgressBar>(R.id.progressBar2)
+        progressBar = findViewById<ProgressBar>(R.id.progressBar2)
         auth = FirebaseAuth.getInstance()
        // user = auth.currentUser!!
 
@@ -62,10 +65,11 @@ class RegisterUserActivity : AppCompatActivity() {
 
         register.setOnClickListener {
 
+
             var emailInput: String = email.text.toString()
             var passwordInput: String = password.text.toString()
             var nameInput = name.text.toString()
-            var phoneInput = phoneNumber.text.toString().toInt()
+            var phoneInput = phoneNumber.text.toString()
 
             if (TextUtils.isEmpty(email.text)) {
                 email.setError("Email Address is required")
@@ -100,8 +104,6 @@ class RegisterUserActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
             }
-
-                Toast.makeText(this,"here",Toast.LENGTH_SHORT).show()
 
                 auth.createUserWithEmailAndPassword(emailInput, passwordInput)
                     .addOnCompleteListener {

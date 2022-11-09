@@ -17,6 +17,7 @@ class LogInActivity : AppCompatActivity() {
 
     private lateinit var  auth: FirebaseAuth
     private lateinit var user: FirebaseUser
+    private lateinit var imageView: ImageView
 
     /*
     Took the below pattern from ->
@@ -37,7 +38,10 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
+        supportActionBar?.hide()
 
+        imageView = findViewById(R.id.imageView2)
+        imageView.setImageResource(R.drawable.hanger)
 
         register = findViewById(R.id.registerTextView)
         register.setOnClickListener {

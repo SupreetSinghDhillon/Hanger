@@ -48,6 +48,8 @@ class RegisterUserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_user)
 
+        supportActionBar?.hide()
+
         email = findViewById(R.id.editTextTextEmailAddress2)
         name = findViewById(R.id.editTextTextPersonName)
         phoneNumber = findViewById(R.id.editTextNumber)

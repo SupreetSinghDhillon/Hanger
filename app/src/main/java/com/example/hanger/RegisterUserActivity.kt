@@ -1,6 +1,5 @@
 package com.example.hanger
 
-import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import java.util.regex.Pattern
 
 class RegisterUserActivity : AppCompatActivity() {
 
@@ -34,7 +32,7 @@ class RegisterUserActivity : AppCompatActivity() {
     Took the below pattern from ->
     https://stackoverflow.com/questions/1819142/how-should-i-validate-an-e-mail-address
      */
-    val EMAIL_ADDRESS_PATTERN: Regex = Regex(
+    val regex: Regex = Regex(
         "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
                 "\\@" +
                 "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
@@ -74,7 +72,7 @@ class RegisterUserActivity : AppCompatActivity() {
             }
             if(!(TextUtils.isEmpty(email.text)))
             {
-               if(!(emailInput.matches(EMAIL_ADDRESS_PATTERN)))
+               if(!(emailInput.matches(regex)))
                {
                    email.setError("Please Enter Correct Email Address")
                }

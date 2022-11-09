@@ -6,7 +6,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import java.util.regex.Pattern
 
 class LogInActivity : AppCompatActivity() {
 
@@ -23,7 +22,7 @@ class LogInActivity : AppCompatActivity() {
     Took the below pattern from ->
     https://stackoverflow.com/questions/1819142/how-should-i-validate-an-e-mail-address
      */
-    val EMAIL_ADDRESS_PATTERN: Pattern = Pattern.compile(
+    val regex: Regex = Regex(
         "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
                 "\\@" +
                 "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
@@ -58,6 +57,8 @@ class LogInActivity : AppCompatActivity() {
         logIn.setOnClickListener {
             var emailInput: String = email.text.toString()
             var passwordInput: String = password.text.toString()
+
+
 
             //progressDialog.visibility = View.VISIBLE
             auth.signInWithEmailAndPassword(emailInput,passwordInput).addOnCompleteListener {

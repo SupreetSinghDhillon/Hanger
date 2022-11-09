@@ -69,24 +69,39 @@ class RegisterUserActivity : AppCompatActivity() {
 
             if (TextUtils.isEmpty(email.text)) {
                 email.setError("Email Address is required")
+                return@setOnClickListener
             }
             if(!(TextUtils.isEmpty(email.text)))
             {
                if(!(emailInput.matches(regex)))
                {
                    email.setError("Please Enter Correct Email Address")
+                   return@setOnClickListener
                }
             }
             if (TextUtils.isEmpty(name.text)) {
                 name.setError("Full Name is required")
+                return@setOnClickListener
             }
             if (TextUtils.isEmpty(phoneNumber.text)) {
                 phoneNumber.setError("Phone Number is required")
+                return@setOnClickListener
             }
             if (TextUtils.isEmpty(password.text)) {
                 password.setError("Password is required")
+                return@setOnClickListener
             }
-            else {
+
+            if(!(TextUtils.isEmpty(password.text)))
+            {
+                if(passwordInput.length<6)
+                {
+                    password.setError("Password should be more than 6 characters long")
+                    return@setOnClickListener
+                }
+            }
+
+                Toast.makeText(this,"here",Toast.LENGTH_SHORT).show()
 
                 auth.createUserWithEmailAndPassword(emailInput, passwordInput)
                     .addOnCompleteListener {
@@ -98,14 +113,13 @@ class RegisterUserActivity : AppCompatActivity() {
 
                             database.push().setValue(user)
 
-
                             var intent: Intent = Intent(this, HangerActivity::class.java)
                             startActivity(intent)
+
                         } else {
                             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                         }
                     }
-            }
         }
     }
 

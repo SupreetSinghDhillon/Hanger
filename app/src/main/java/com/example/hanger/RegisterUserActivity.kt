@@ -29,7 +29,6 @@ class RegisterUserActivity : AppCompatActivity() {
 
 
     private lateinit var  auth: FirebaseAuth
-    private lateinit var user: FirebaseUser
 
     /*
     Took the below pattern from ->

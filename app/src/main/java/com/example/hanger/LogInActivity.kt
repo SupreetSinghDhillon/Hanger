@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 
 /*
 Learnt about Firebase and Login Activity from ->
-https://www.youtube.com/watch?v=gaykE36N7PY
+https://www.youtube.com/watch?v=Z-RE1QuUWPg
  */
 
 class LogInActivity : AppCompatActivity() {
@@ -23,7 +23,6 @@ class LogInActivity : AppCompatActivity() {
     private lateinit var forgotPassword: TextView
 
     private lateinit var  auth: FirebaseAuth
-    private lateinit var user: FirebaseUser
     private lateinit var imageView: ImageView
 
     /*

@@ -25,10 +25,7 @@ class RegisterUserActivity : AppCompatActivity() {
     private lateinit var register: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var database: DatabaseReference
-
-
-
-    private lateinit var  auth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
     /*
     Took the below pattern from ->
@@ -48,6 +45,7 @@ class RegisterUserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_user)
 
+        auth = FirebaseAuth.getInstance()
         supportActionBar?.hide()
 
         email = findViewById(R.id.editTextTextEmailAddress2)
@@ -56,10 +54,10 @@ class RegisterUserActivity : AppCompatActivity() {
         password = findViewById(R.id.editTextTextPassword2)
         register = findViewById(R.id.button2)
         progressBar = findViewById<ProgressBar>(R.id.progressBar2)
-        auth = FirebaseAuth.getInstance()
-       // user = auth.currentUser!!
 
-       database = FirebaseDatabase.getInstance().reference.child("Users")
+        // user = auth.currentUser!!
+
+        database = FirebaseDatabase.getInstance().reference.child("Users")
 
 
         register.setOnClickListener {
@@ -74,13 +72,11 @@ class RegisterUserActivity : AppCompatActivity() {
                 email.setError("Email Address is required")
                 return@setOnClickListener
             }
-            if(!(TextUtils.isEmpty(email.text)))
-            {
-               if(!(emailInput.matches(regex)))
-               {
-                   email.setError("Please Enter Correct Email Address")
-                   return@setOnClickListener
-               }
+            if (!(TextUtils.isEmpty(email.text))) {
+                if (!(emailInput.matches(regex))) {
+                    email.setError("Please Enter Correct Email Address")
+                    return@setOnClickListener
+                }
             }
             if (TextUtils.isEmpty(name.text)) {
                 name.setError("Full Name is required")
@@ -95,32 +91,29 @@ class RegisterUserActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if(!(TextUtils.isEmpty(password.text)))
-            {
-                if(passwordInput.length<6)
-                {
+            if (!(TextUtils.isEmpty(password.text))) {
+                if (passwordInput.length < 6) {
                     password.setError("Password should be more than 6 characters long")
                     return@setOnClickListener
                 }
             }
 
-                auth.createUserWithEmailAndPassword(emailInput, passwordInput)
-                    .addOnCompleteListener {
+            auth.createUserWithEmailAndPassword(emailInput, passwordInput)
+                .addOnCompleteListener {
 
-                        if (it.isSuccessful) {
-                            Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-                            var user: User = User()
-                            user.createUser(nameInput, emailInput, phoneInput)
+                    if (it.isSuccessful) {
+                        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                        var user: User = User(nameInput, emailInput, phoneInput)
 
-                            database.push().setValue(user)
+                        database.child(it.result.user!!.uid.toString()).setValue(user)
 
-                            var intent: Intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
+                        var intent: Intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
 
-                        } else {
-                            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
-                        }
+                    } else {
+                        Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                     }
+                }
         }
     }
 

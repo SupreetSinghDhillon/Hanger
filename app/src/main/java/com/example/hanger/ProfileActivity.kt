@@ -10,7 +10,7 @@ import com.google.firebase.database.*
 
 class ProfileActivity : AppCompatActivity() {
 
-     var user: User? = null
+    var user: User? = null
     lateinit var auth: FirebaseAuth
     lateinit var databaseReference: DatabaseReference
     lateinit var nameView: TextView
@@ -60,5 +60,4 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
 
-    //private fun showProgressBar()
 }

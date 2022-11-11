@@ -4,28 +4,26 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : AppCompatActivity() {
+class ViewMyListings : AppCompatActivity() {
 
-    lateinit var toggle:ActionBarDrawerToggle
+    lateinit var toggle: ActionBarDrawerToggle
 
     lateinit var mDrawerLayout: DrawerLayout
 
     lateinit var mNavView: NavigationView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_view_my_listings)
 
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mNavView = findViewById(R.id.navView)
 
-        toggle = ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close)
+        toggle = ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close)
         mDrawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         mNavView.setNavigationItemSelectedListener {
 
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.profile -> {
                     var intent: Intent = Intent(this, ProfileActivity::class.java)
                     startActivity(intent)
@@ -46,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                     var intent: Intent = Intent(this, ViewMyListings::class.java)
                     startActivity(intent)
                 }
-                R.id.logout ->{
+                R.id.logout -> {
                     FirebaseAuth.getInstance().signOut();
                     var intent: Intent = Intent(this, LogInActivity::class.java)
                     startActivity(intent)
@@ -54,9 +52,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(toggle.onOptionsItemSelected(item)){
             return true
@@ -64,5 +60,4 @@ class MainActivity : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
-
 }

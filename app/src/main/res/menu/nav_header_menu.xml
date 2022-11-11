@@ -6,11 +6,11 @@
         android:id="@+id/profile"
         android:title="My Profile" />
     <item
-        android:id="@+id/item2"
-        android:title="item2"/>
+        android:id="@+id/browseListings"
+        android:title="Browse Listings"/>
     <item
-        android:id="@+id/item3"
-        android:title="item3"/>
+        android:id="@+id/myListings"
+        android:title="My Listings"/>
     <item
         android:id="@+id/logout"
         android:title="Logout"/>

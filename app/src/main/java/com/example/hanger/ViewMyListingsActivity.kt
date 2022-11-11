@@ -7,16 +7,18 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 class ViewMyListings : AppCompatActivity() {
 
     lateinit var toggle: ActionBarDrawerToggle
-
     lateinit var mDrawerLayout: DrawerLayout
-
     lateinit var mNavView: NavigationView
+    private lateinit var listOfItemsRecyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_my_listings)
@@ -30,6 +32,7 @@ class ViewMyListings : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // hamburger menu
         mNavView.setNavigationItemSelectedListener {
 
             when (it.itemId) {
@@ -53,6 +56,11 @@ class ViewMyListings : AppCompatActivity() {
             }
             true
         }
+
+        // fetching data
+        listOfItemsRecyclerView = findViewById(R.id.myListingsItems)
+        listOfItemsRecyclerView.layoutManager = LinearLayoutManager(this)
+        listOfItemsRecyclerView.setHasFixedSize(true)
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(toggle.onOptionsItemSelected(item)){

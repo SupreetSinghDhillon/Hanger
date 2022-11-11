@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:text="Unfinished!! Show your listing details here and add buttons to delete or deactivate your listing" />
+
+            <TextView
+                android:id="@+id/newItemPictureText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Item image"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/newItemPicture"
+                android:layout_width="200dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center" />
+
+            <Button
+                android:id="@+id/buttonAddPicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Add Picture" />
+
+            <TextView
+                android:id="@+id/newItemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Item Name"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/editListingName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Should retrieve item name"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/newItemPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Price to rent per day"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/editListingPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Should retrieve price"
+                android:inputType="numberDecimal"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/newItemLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Location to pick up"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/editListingLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Should retrieve pick up address"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/newItemDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Description"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/editListingDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Should retrieve item description"
+                android:minHeight="48dp" />
+
+            <Button
+                android:id="@+id/buttonDeactivateListing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Deactivate this listing"
+                android:layout_gravity="center"
+                android:onClick="deactivateListingOnClick"
+                />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/buttonUpdateListing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:onClick="updateListingOnClick"
+                    android:text="Update"
+                    />
+
+                <Button
+                    android:id="@+id/buttonCancelEditListing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:onClick="cancelEditListingOnClick"
+                    android:text="Cancel" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

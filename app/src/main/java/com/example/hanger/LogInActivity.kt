@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.hanger.adapters.Util
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 /*
 Learnt about Firebase and Login Activity from ->
@@ -44,6 +44,8 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
+        //check permission
+        Util.checkPermissions(this)
         supportActionBar?.hide()
 
         imageView = findViewById(R.id.imageView2)

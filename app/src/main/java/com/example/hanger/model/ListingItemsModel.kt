@@ -1,4 +1,4 @@
-package com.example.hanger
+package com.example.hanger.model
 
 data class ListingItemsModel (
     var itemId: String? = null,

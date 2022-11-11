@@ -1,15 +1,23 @@
 package com.example.hanger
 
-import android.R.attr.button
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
+import androidx.lifecycle.ViewModelProvider
+import com.example.hanger.adapters.Util
+import com.example.hanger.model.ListingItemsModel
+import com.example.hanger.model.MyViewModel
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -25,6 +33,10 @@ class UserAddListingActivity : AppCompatActivity() {
     private lateinit var newListingPrice: String
     private lateinit var newListingLocation: String
     var newListingDesc: String? = "This user has not added any description."
+    private var recentImageUri: Uri? = null
+    private lateinit var galleryResult: ActivityResultLauncher<Intent>
+    private lateinit var myViewModel: MyViewModel
+    private lateinit var itemPicture: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +48,7 @@ class UserAddListingActivity : AppCompatActivity() {
         itemLocation = findViewById(R.id.editListingLocation)
         itemDesc = findViewById(R.id.editListingDescription)
         publishListing = findViewById(R.id.buttonPublishListing)
+        itemPicture = findViewById(R.id.newItemPicture)
         // to do: push logged in user's account onto the table as well so the buyer can contact them
 
         database = FirebaseDatabase.getInstance().getReference("Listings")
@@ -62,6 +75,29 @@ class UserAddListingActivity : AppCompatActivity() {
                 }
             })
         }
+
+        //renders image
+        myViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        myViewModel.listingImage.observe(this, { it ->
+            itemPicture.setImageBitmap(it)
+        })
+
+        //image
+        galleryResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+            if (result.resultCode === RESULT_OK) {
+                val img = result.data
+                this.contentResolver.takePersistableUriPermission(
+                    img?.data!!,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+                if (img != null && img.data != null) {
+                    recentImageUri = img.data
+                    val bitmap = Util.getBitmap(this, recentImageUri!!)
+                    myViewModel.listingImage.value = bitmap
+                }
+            }
+        }
     }
 
     fun publishNewListingOnClick (view: View) {
@@ -84,5 +120,14 @@ class UserAddListingActivity : AppCompatActivity() {
 
     fun cancelListingOnClick(view: View){
         finish()
+    }
+
+
+    fun openPictureSelectionOnClick (view: View) {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_OPEN_DOCUMENT
+        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        galleryResult.launch(intent)
     }
 }

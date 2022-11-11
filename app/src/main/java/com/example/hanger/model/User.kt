@@ -1,4 +1,4 @@
-package com.example.hanger
+package com.example.hanger.model
 
 import android.provider.ContactsContract.CommonDataKinds.Email
 import java.util.jar.Attributes.Name

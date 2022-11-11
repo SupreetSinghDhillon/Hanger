@@ -76,6 +76,15 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".UserAddListingActivity"
+            android:exported="false"
+            android:label="@string/user_listing_title"
+            android:theme="@style/Theme.Hanger.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

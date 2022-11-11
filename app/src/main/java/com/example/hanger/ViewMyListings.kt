@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -59,5 +60,10 @@ class ViewMyListings : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun addListingOnClick (view: View){
+        val myIntent = Intent(this, UserAddListingActivity::class.java)
+        this.startActivity(myIntent)
     }
 }

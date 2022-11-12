@@ -15,4 +15,13 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="user_listing_title">My Listings</string>
+
+    <string-array name="category_type">
+        <item>Casual</item>
+        <item>Prom</item>
+        <item>Suits</item>
+        <item>Wedding</item>
+        <item>Ethnic Wear</item>
+        <item>Other</item>
+    </string-array>
 </resources>

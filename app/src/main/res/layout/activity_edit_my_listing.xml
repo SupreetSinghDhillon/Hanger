@@ -76,6 +76,20 @@
                 android:minHeight="48dp" />
 
             <TextView
+                android:id="@+id/newItemCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Category"
+                android:visibility="visible" />
+
+            <Spinner
+                android:id="@+id/editListingCategories"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:entries="@array/category_type" />
+
+            <TextView
                 android:id="@+id/newItemLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

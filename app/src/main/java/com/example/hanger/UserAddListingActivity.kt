@@ -29,14 +29,13 @@ class UserAddListingActivity : AppCompatActivity() {
     private lateinit var newListingName: String
     private lateinit var newListingPrice: String
     private lateinit var newListingLocation: String
-    private lateinit var newListingCategory: String
+    private var newListingCategory: Int = 0
     var newListingDesc: String? = "This user has not added any description."
     private var recentImageUri: Uri? = null
     private lateinit var galleryResult: ActivityResultLauncher<Intent>
     private lateinit var myViewModel: MyViewModel
     private lateinit var itemPicture: ImageView
     private lateinit var inputCategorySpinner: Spinner
-    val arrayOfCategory = arrayOf("Casual", "Prom", "Suits", "Wedding", "Ethnic Wear", "Other" )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,11 +105,11 @@ class UserAddListingActivity : AppCompatActivity() {
         newListingPrice = itemPrice.text.toString()
         newListingLocation = itemLocation.text.toString()
         newListingDesc = itemDesc.text.toString()
-        newListingCategory = arrayOfCategory[inputCategorySpinner.selectedItemPosition]
+        newListingCategory = inputCategorySpinner.selectedItemPosition
 
         // pushing to listings table
         val itemId = database.push().key!!
-        val item = ListingItemsModel(itemId, newListingName, newListingPrice, newListingLocation, newListingDesc, newListingCategory)
+        val item = ListingItemsModel(itemId, newListingName, newListingPrice, newListingLocation, newListingDesc, newListingCategory, true)
         database.child(itemId).setValue(item).addOnCompleteListener{
             Toast.makeText(this, "Listing created successfully!", Toast.LENGTH_LONG).show()
         }.addOnFailureListener{ err->

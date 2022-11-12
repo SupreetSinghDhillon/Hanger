@@ -6,5 +6,6 @@ data class ListingItemsModel (
     var itemPrice: String? = "No price",
     var itemLocation: String? = "No Location",
     var itemDesc: String? = "No description",
-    var itemCategory: String? = "No category"
+    var itemCategory: Int = 0,
+    var isActive: Boolean = true
 )

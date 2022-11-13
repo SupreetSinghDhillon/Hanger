@@ -18,10 +18,10 @@
 
     <string-array name="category_type">
         <item>Casual</item>
-        <item>Prom</item>
+        <item>Dresses</item>
         <item>Suits</item>
-        <item>Wedding</item>
+        <item>Prom/Wedding</item>
+        <item>Hype</item>
         <item>Ethnic Wear</item>
-        <item>Other</item>
     </string-array>
 </resources>

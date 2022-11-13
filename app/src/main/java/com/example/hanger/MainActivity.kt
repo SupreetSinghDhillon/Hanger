@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.GridView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -12,10 +13,10 @@ import com.google.firebase.auth.FirebaseAuth
 class MainActivity : AppCompatActivity() {
 
     lateinit var toggle:ActionBarDrawerToggle
-
     lateinit var mDrawerLayout: DrawerLayout
-
     lateinit var mNavView: NavigationView
+
+    lateinit var gridViewCategories: GridView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +54,8 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+
 
     }
 

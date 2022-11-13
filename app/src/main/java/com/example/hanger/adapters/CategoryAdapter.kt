@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.TextView
 import com.example.hanger.R
 import com.example.hanger.model.CategoryModel
 
@@ -16,6 +17,7 @@ class CategoryAdapter(
 
     private var layoutInflater: LayoutInflater? = null
     private lateinit var imageView: ImageView
+    private lateinit var textViewCategory: TextView
 
     override fun getCount(): Int {
         return categoryList.size
@@ -41,7 +43,9 @@ class CategoryAdapter(
         }
 
         imageView = convertView!!.findViewById(R.id.imageViewCategory)
+        textViewCategory = convertView.findViewById(R.id.textViewCategory)
         imageView.setImageResource(getItem(position).categoryImage)
+        textViewCategory.text = getItem(position).categoryName
 
         return convertView
     }

@@ -7,6 +7,8 @@ import android.view.MenuItem
 import android.widget.GridView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.hanger.adapters.CategoryAdapter
+import com.example.hanger.model.CategoryModel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -17,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var mNavView: NavigationView
 
     lateinit var gridViewCategories: GridView
+    var categoryList: ArrayList<CategoryModel> = ArrayList()
+    lateinit var categoryAdapter: CategoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,11 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        populateCategories(categoryList)
+        gridViewCategories = findViewById(R.id.gridViewCategories)
+        categoryAdapter = CategoryAdapter(categoryList = categoryList, context = this)
+        gridViewCategories.adapter = categoryAdapter
 
         mNavView.setNavigationItemSelectedListener {
 
@@ -67,4 +76,12 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun populateCategories(categoryList: ArrayList<CategoryModel>) {
+        categoryList.add(CategoryModel(0, "Casual", R.drawable.ic_casual))
+        categoryList.add(CategoryModel(1, "Dresses", R.drawable.ic_dresses))
+        categoryList.add(CategoryModel(2, "Suits", R.drawable.ic_suits))
+        categoryList.add(CategoryModel(3, "Prom/Wedding", R.drawable.ic_promwedding))
+        categoryList.add(CategoryModel(4, "Hype", R.drawable.ic_hype))
+        categoryList.add(CategoryModel(5, "Ethnic", R.drawable.ic_ethnic))
+    }
 }

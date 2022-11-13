@@ -11,7 +11,9 @@
         android:id="@+id/gridViewCategories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:numColumns="2"/>
+        android:numColumns="2"
+        android:horizontalSpacing="4dp"
+        android:verticalSpacing="4dp"/>
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"

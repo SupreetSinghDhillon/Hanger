@@ -22,22 +22,9 @@ class User {
 }
 
  */
- class User{
-    lateinit var name: String
-    lateinit var email: String
-    lateinit var phone: String
-
-    constructor(){
-
-    }
-
-    constructor(name: String, email: String, phone: String){
-        this.name = name;
-        this.email=email;
-        this.phone =phone;
-    }
-
-
-
-
-}
+ class User(
+    var id: String? = null,
+    var name: String? = null,
+    var email: String? = null,
+    var phone: String?  = null
+)

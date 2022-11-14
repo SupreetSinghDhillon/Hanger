@@ -7,6 +7,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hanger.adapters.Util
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 /*
 Learnt about Firebase and Login Activity from ->
@@ -24,6 +25,7 @@ class LogInActivity : AppCompatActivity() {
 
     private lateinit var  auth: FirebaseAuth
     private lateinit var imageView: ImageView
+    private var currentUser: FirebaseUser? = null
 
     /*
     Took the below pattern from ->
@@ -63,6 +65,13 @@ class LogInActivity : AppCompatActivity() {
         logIn = findViewById(R.id.button)
         progressDialog = findViewById(R.id.progressBar)
         auth = FirebaseAuth.getInstance()
+
+        currentUser = FirebaseAuth.getInstance().currentUser
+
+        if (currentUser != null) {
+            val intent: Intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         forgotPassword.setOnClickListener {
             var intent: Intent = Intent(this, ForgotPasswordActivity::class.java)

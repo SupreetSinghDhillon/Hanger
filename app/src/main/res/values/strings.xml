@@ -15,6 +15,11 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="user_listing_title">My Listings</string>
+    <string name="messages">Messages</string>
+    <string name="logout">Logout</string>
+    <string name="my_listings">My Listings</string>
+    <string name="browse_listings">Browse Listings</string>
+    <string name="my_profile">My Profile</string>
 
     <string-array name="category_type">
         <item>Casual</item>

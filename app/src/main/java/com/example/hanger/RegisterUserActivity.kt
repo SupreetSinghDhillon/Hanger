@@ -100,9 +100,10 @@ class RegisterUserActivity : AppCompatActivity() {
 
                     if (it.isSuccessful) {
                         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-                        var user: User = User(nameInput, emailInput, phoneInput)
+                        val userId = it.result.user!!.uid.toString()
+                        var user: User = User(userId, nameInput, emailInput, phoneInput)
 
-                        database.child(it.result.user!!.uid.toString()).setValue(user)
+                        database.child(userId).setValue(user)
 
                         var intent: Intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)

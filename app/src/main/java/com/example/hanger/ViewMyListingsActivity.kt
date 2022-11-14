@@ -56,6 +56,10 @@ class ViewMyListingsActivity : AppCompatActivity() {
                     var intent: Intent = Intent(this, ViewMyListingsActivity::class.java)
                     startActivity(intent)
                 }
+                R.id.messages -> {
+                    var intent: Intent = Intent(this, MessagesActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.logout -> {
                     FirebaseAuth.getInstance().signOut();
                     var intent: Intent = Intent(this, LogInActivity::class.java)

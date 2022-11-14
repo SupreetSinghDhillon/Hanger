@@ -13,14 +13,21 @@
         android:theme="@style/Theme.Hanger"
         tools:targetApi="31">
         <activity
-            android:name=".ViewMyListingsActivity"
+            android:name=".MessageActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ChooseListingType"
+            android:name=".MessagesActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ViewMyListingsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -43,15 +50,6 @@
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".HangerActivity"
-            android:exported="false"
-            android:label="@string/title_activity_hanger"
-            android:theme="@style/Theme.Hanger.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

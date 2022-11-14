@@ -7,6 +7,10 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.hanger.adapters.MessageAdapter
+import com.example.hanger.model.Message
 import com.example.hanger.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -21,6 +25,10 @@ class MessageActivity : AppCompatActivity() {
     private lateinit var currUser: FirebaseUser
     private lateinit var reference: DatabaseReference
     private lateinit var toolbar: Toolbar
+
+    private lateinit var messageAdapter: MessageAdapter
+    private lateinit var recyclerView: RecyclerView
+    private var messages: ArrayList<Message> = arrayListOf()
 
     private lateinit var btn_send: ImageButton
     private lateinit var text_send: EditText
@@ -43,6 +51,8 @@ class MessageActivity : AppCompatActivity() {
                 val userToMessage: User = snapshot.getValue<User>() as User
                 username.text = userToMessage.name
                 avatarImage.setImageResource(R.mipmap.ic_launcher)
+
+                readMessages(currUser.uid, userId)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -59,8 +69,13 @@ class MessageActivity : AppCompatActivity() {
                 sendMessage(currUser.uid, userId, message)
                 text_send.setText("")
             }
-
         })
+
+        recyclerView = findViewById(R.id.recycler_view)
+        recyclerView.setHasFixedSize(true)
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.stackFromEnd = true
+        recyclerView.layoutManager = linearLayoutManager
     }
 
     private fun sendMessage(sender: String, receiver: String, message: String) {
@@ -73,5 +88,31 @@ class MessageActivity : AppCompatActivity() {
         map.put("message", message)
 
         db.child("Chats").push().setValue(map)
+    }
+
+    private fun readMessages(id: String, userId: String) {
+        val db: DatabaseReference = FirebaseDatabase.getInstance().getReference("Chats")
+
+        db.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                messages.clear()
+
+                for (messageData: DataSnapshot in snapshot.children) {
+                    val message: Message = messageData.getValue<Message>() as Message
+
+                    if ((message.receiver == id && message.sender == userId) ||
+                            message.receiver == userId && message.sender == id) {
+                        messages.add(message)
+                    }
+                }
+                messageAdapter = MessageAdapter(messages)
+                recyclerView.adapter = messageAdapter
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 }

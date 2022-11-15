@@ -6,10 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,11 +29,13 @@ class UserAddListingActivity : AppCompatActivity() {
     private lateinit var newListingName: String
     private lateinit var newListingPrice: String
     private lateinit var newListingLocation: String
+    private var newListingCategory: Int = 0
     var newListingDesc: String? = "This user has not added any description."
     private var recentImageUri: Uri? = null
     private lateinit var galleryResult: ActivityResultLauncher<Intent>
     private lateinit var myViewModel: MyViewModel
     private lateinit var itemPicture: ImageView
+    private lateinit var inputCategorySpinner: Spinner
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,8 +48,8 @@ class UserAddListingActivity : AppCompatActivity() {
         itemDesc = findViewById(R.id.editListingDescription)
         publishListing = findViewById(R.id.buttonPublishListing)
         itemPicture = findViewById(R.id.newItemPicture)
+        inputCategorySpinner = findViewById(R.id.editListingCategories)
         // to do: push logged in user's account onto the table as well so the buyer can contact them
-
         database = FirebaseDatabase.getInstance().getReference("Listings")
 
         // only enable button if all the fields are entered
@@ -106,10 +105,11 @@ class UserAddListingActivity : AppCompatActivity() {
         newListingPrice = itemPrice.text.toString()
         newListingLocation = itemLocation.text.toString()
         newListingDesc = itemDesc.text.toString()
+        newListingCategory = inputCategorySpinner.selectedItemPosition
 
         // pushing to listings table
         val itemId = database.push().key!!
-        val item = ListingItemsModel(itemId, newListingName, newListingPrice, newListingLocation, newListingDesc)
+        val item = ListingItemsModel(itemId, newListingName, newListingPrice, newListingLocation, newListingDesc, newListingCategory, true)
         database.child(itemId).setValue(item).addOnCompleteListener{
             Toast.makeText(this, "Listing created successfully!", Toast.LENGTH_LONG).show()
         }.addOnFailureListener{ err->
@@ -117,6 +117,7 @@ class UserAddListingActivity : AppCompatActivity() {
         }
         finish()
     }
+
 
     fun cancelListingOnClick(view: View){
         finish()

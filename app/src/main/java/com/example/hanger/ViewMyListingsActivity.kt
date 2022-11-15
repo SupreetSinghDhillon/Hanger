@@ -56,6 +56,10 @@ class ViewMyListingsActivity : AppCompatActivity() {
                     var intent: Intent = Intent(this, ViewMyListingsActivity::class.java)
                     startActivity(intent)
                 }
+                R.id.messages -> {
+                    var intent: Intent = Intent(this, MessagesActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.logout -> {
                     FirebaseAuth.getInstance().signOut();
                     var intent: Intent = Intent(this, LogInActivity::class.java)
@@ -103,12 +107,17 @@ class ViewMyListingsActivity : AppCompatActivity() {
                     itemAdapter.setOnItemClickListener(object : ListingAdapter.onItemClickListener{
                         override fun onCardClicked(position: Int) {
                             val myIntent = Intent(this@ViewMyListingsActivity, EditMyListingActivity::class.java)
-                            intent.putExtra("itemId",itemList[position].itemId)
-                            //put the rest of the info here
-                            // put name
-                            // put image
-                            // put address
-                            // put price
+                            // not passing in the ID and grabbing it from database in EditMyListingsActivity as this is easier
+                            // but we can always change it later for a more efficient code
+                            println("debug: first"+itemList[position].itemName)
+                            myIntent.putExtra("itemId",itemList[position].itemId)
+                            myIntent.putExtra("itemName", itemList[position].itemName)
+                            myIntent.putExtra("itemPrice", itemList[position].itemPrice)
+                            myIntent.putExtra("itemLocation", itemList[position].itemLocation)
+                            myIntent.putExtra("itemCategory", itemList[position].itemCategory)
+                            myIntent.putExtra("itemDesc", itemList[position].itemDesc)
+                            myIntent.putExtra("itemActive", itemList[position].isActive)
+                            // TODO: missing put image
                             startActivity(myIntent)
                         }
                     })

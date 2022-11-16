@@ -1,12 +1,14 @@
 package com.example.hanger.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.hanger.ListingsActivity
 import com.example.hanger.R
 import com.example.hanger.model.CategoryModel
 
@@ -46,6 +48,13 @@ class CategoryAdapter(
         textViewCategory = convertView.findViewById(R.id.textViewCategory)
         imageView.setImageResource(getItem(position).categoryImage)
         textViewCategory.text = getItem(position).categoryName
+
+        convertView.setOnClickListener {
+            val intent = Intent(context, ListingsActivity::class.java)
+            intent.putExtra("CategoryId", categoryList[position].categoryId)
+            intent.putExtra("CategoryName", categoryList[position].categoryName)
+            context.startActivity(intent)
+        }
 
         return convertView
     }

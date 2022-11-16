@@ -14,13 +14,13 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var toggle:ActionBarDrawerToggle
-    lateinit var mDrawerLayout: DrawerLayout
-    lateinit var mNavView: NavigationView
+    private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var mNavView: NavigationView
 
-    lateinit var gridViewCategories: GridView
-    var categoryList: ArrayList<CategoryModel> = ArrayList()
-    lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var gridViewCategories: GridView
+    private var categoryList: ArrayList<CategoryModel> = ArrayList()
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +63,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-
 
     }
 

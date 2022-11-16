@@ -79,18 +79,22 @@ class ListingsActivity: AppCompatActivity() {
         val category = intent.getIntExtra("CategoryId", 0)
         println("debug: category is $category")
         db = Firebase.database.reference.child("Listings")
-        val categoryQuery = db.orderByChild("itemCategory").equalTo(category.toString())
+        val categoryQuery = db.orderByChild("itemCategory").equalTo(category.toDouble())
         categoryQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 println("debug: snapshot is $snapshot")
                 listings.clear()
-                println("debug: listings data changed")
                 for (data in snapshot.children) {
                     val listing = data.getValue<ListingItemsModel>()
                     listings.add(listing!!)
-                    println("debug: added to listings")
                 }
-                recyclerViewListings.adapter = ListingAdapter(listings)
+                val listingAdapter = ListingAdapter(listings)
+                recyclerViewListings.adapter = listingAdapter
+                listingAdapter.setOnItemClickListener(object : ListingAdapter.onItemClickListener{
+                    override fun onCardClicked(position: Int) {
+                        TODO()
+                    }
+                })
             }
 
             override fun onCancelled(error: DatabaseError) {

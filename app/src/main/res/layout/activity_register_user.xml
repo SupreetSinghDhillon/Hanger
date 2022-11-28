@@ -19,11 +19,29 @@
             android:text="Sign Up"
             android:textSize="44sp" />
 
+        <ImageView
+            android:id="@+id/personImage"
+            android:layout_width="125dp"
+            android:layout_below="@+id/profileTextView"
+            android:layout_height="125dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="30dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/changePictureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/personImage"
+            android:text="Change Picture" />
+
     <EditText
         android:id="@+id/editTextTextPersonName"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/profileTextView"
+        android:layout_below="@+id/changePictureButton"
         android:layout_marginBottom="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

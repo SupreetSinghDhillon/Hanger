@@ -58,21 +58,5 @@
         android:layout_marginBottom="25dp"
         android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/changePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="chnage picture" />
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="59dp"
-        android:text="Save" />
-
 
 </RelativeLayout>

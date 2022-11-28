@@ -52,7 +52,7 @@ class ProfileActivity : AppCompatActivity() {
         databaseReference.child(userID).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
-                nameView.setText(user?.id ?: "username")
+                nameView.setText(user?.name ?: "username")
                 emailView.setText(user?.email ?: "email")
                 phoneView.setText(user?.phone ?: "phone")
                 getUserProfile()

@@ -1,20 +1,31 @@
 package com.example.hanger
 
 //import com.google.firebase.storage.internal.Util
+import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.FileUtils
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.widget.*
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.example.hanger.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import java.util.Date
+import com.xd.camerademokotlin.Util
+import java.io.File
+import java.io.FileOutputStream
+import kotlin.concurrent.thread
 
 class RegisterUserActivity : AppCompatActivity() {
 
@@ -26,7 +37,7 @@ class RegisterUserActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var register: Button
     private lateinit var finalImageUri: String
-    private lateinit var selectedImage: Uri
+    private lateinit var selectedImageUri: Uri
     private lateinit var progressBar: ProgressBar
     private lateinit var changePictureButton: Button
     private lateinit var profileImageView: ImageView
@@ -75,17 +86,10 @@ class RegisterUserActivity : AppCompatActivity() {
         storageReference = firebaseStorage.reference
 
 
-        /*
-        val imgFile = File(getExternalFilesDir(null), "image.jpg")
-        imageUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, imgFile)
 
         val tempImgFile = File(getExternalFilesDir(null), "tmp_image.jpg")
         tempUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, tempImgFile)
 
-        if (imgFile.exists()) {
-           val bitmap = Util.getBitmap(this, imageUri)
-           profileImageView.setImageBitmap(bitmap)
-        }
 
         cameraLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -93,6 +97,7 @@ class RegisterUserActivity : AppCompatActivity() {
             if (it.resultCode == Activity.RESULT_OK) {
                 imageChanged = 1
                val imageBitmap = Util.getBitmap(this, tempUri)
+               // finalImageUri = tempUri.toString()
                 profileImageView.setImageBitmap(imageBitmap)
             }
         }
@@ -107,6 +112,7 @@ class RegisterUserActivity : AppCompatActivity() {
                 thread {
                     val inputStream = contentResolver.openInputStream(it)
                     val outputStream = FileOutputStream(tempUri.path)
+                    //finalImageUri = tempUri.toString()
                     if (inputStream != null) {
                         FileUtils.copy(inputStream, outputStream)
                         inputStream.close()
@@ -116,35 +122,35 @@ class RegisterUserActivity : AppCompatActivity() {
             }
         }
 
-         */
+
 
         changePictureButton  = findViewById(R.id.changePictureButton)
         changePictureButton.setOnClickListener {
-            val intent = Intent()
-            intent.action = Intent.ACTION_GET_CONTENT
-            intent.type = "image/*"
-            startActivityForResult(intent,1)
+           // val intent = Intent()
+            //intent.action = Intent.ACTION_GET_CONTENT
+            //intent.type = "image/*"
+            //startActivityForResult(intent,1)
 
            // galleryLauncher.launch("image/*")
 
 
-//            AlertDialog
-//                .Builder(this)
-//                .setTitle("Pick Profile Picture")
-//                .setPositiveButton(
-//                    "Open Camera",
-//                    DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
-//                        val cameraStartIntent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//                        cameraStartIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri)
-//                        cameraLauncher.launch(cameraStartIntent)
-//                    })
-//                .setNegativeButton(
-//                    "Select From Gallery",
-//                    DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
-//                        galleryLauncher.launch("image/*")
-//                    })
-//                .create()
-//                .show()
+            AlertDialog
+                .Builder(this)
+                .setTitle("Pick Profile Picture")
+                .setPositiveButton(
+                    "Open Camera",
+                    DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
+                        val cameraStartIntent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        cameraStartIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri)
+                        cameraLauncher.launch(cameraStartIntent)
+                    })
+                .setNegativeButton(
+                    "Select From Gallery",
+                    DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
+                        galleryLauncher.launch("image/*")
+                    })
+                .create()
+                .show()
 
         }
 
@@ -190,14 +196,15 @@ class RegisterUserActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
             }
-            if(selectedImage == null)
+            /*
+            if(selectedImageUri == null)
             {
                 Toast.makeText(this,"Please choose an image",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            //uploadProfilePic()
-           // Toast.makeText(this,"uri" + finalImageUri,Toast.LENGTH_SHORT).show()
+             */
+
 
             auth.createUserWithEmailAndPassword(emailInput, passwordInput)
                 .addOnCompleteListener {
@@ -211,8 +218,7 @@ class RegisterUserActivity : AppCompatActivity() {
                             userId,
                             nameInput,
                             emailInput,
-                            phoneInput,
-                            "able",
+                            phoneInput
                         )
 
                         database.child(userId).setValue(user).addOnCompleteListener {
@@ -235,11 +241,12 @@ class RegisterUserActivity : AppCompatActivity() {
     private fun uploadProfilePic() {
 
         val reference = firebaseStorage.reference.child("User Images").child(auth.currentUser!!.uid)
-        //val reference = firebaseStorage.getReference("Users/"+auth.currentUser?.uid)
-        reference.putFile(selectedImage).addOnCompleteListener {
+        //reference.putFile(selectedImageUri)
+        reference.putFile(tempUri)
+        /*
+        reference.putFile(selectedImageUri).addOnCompleteListener {
             if (it.isSuccessful) {
-                //Toast.makeText(this,"Image added in storage",Toast.LENGTH_SHORT).show()
-                finalImageUri = reference.downloadUrl.toString()
+
                 Toast.makeText(this,"Image added in storage",Toast.LENGTH_SHORT).show()
             }
             else
@@ -249,9 +256,12 @@ class RegisterUserActivity : AppCompatActivity() {
             }
 
         }
+
+         */
         //Toast.makeText(this,"Image added in storage"+ finalImageUri,Toast.LENGTH_LONG).show()
     }
 
+    /*
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -259,11 +269,11 @@ class RegisterUserActivity : AppCompatActivity() {
 
             if(data.data !=null)
             {
-                selectedImage = data.data!!
-
-                profileImageView.setImageURI(selectedImage)
-
+                selectedImageUri = data.data!!
+                profileImageView.setImageURI(selectedImageUri)
             }
         }
     }
+
+     */
 }

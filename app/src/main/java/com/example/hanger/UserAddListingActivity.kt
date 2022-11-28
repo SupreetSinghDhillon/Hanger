@@ -182,11 +182,6 @@ class UserAddListingActivity : AppCompatActivity() {
 
     fun openPictureSelectionOnClick (view: View) {
 
-//        val intent = Intent()
-//        intent.type = "image/*"
-//        intent.action = Intent.ACTION_OPEN_DOCUMENT
-//        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-//        galleryResult.launch(intent)
         AlertDialog
             .Builder(this)
             .setTitle("Pick Profile Picture")

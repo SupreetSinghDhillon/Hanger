@@ -35,14 +35,11 @@ class RegisterUserActivity : AppCompatActivity() {
     private lateinit var storageReference: StorageReference
     private lateinit var password: EditText
     private lateinit var register: Button
-    private lateinit var finalImageUri: String
-    private lateinit var selectedImageUri: Uri
     private lateinit var progressBar: ProgressBar
     private lateinit var changePictureButton: Button
     private lateinit var profileImageView: ImageView
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
-    lateinit var imageUri: Uri
     lateinit var tempUri: Uri
     lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     lateinit var galleryLauncher: ActivityResultLauncher<String>

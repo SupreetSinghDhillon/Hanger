@@ -1,6 +1,5 @@
 package com.example.hanger
 
-//import com.google.firebase.storage.internal.Util
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
@@ -126,13 +125,6 @@ class RegisterUserActivity : AppCompatActivity() {
 
         changePictureButton  = findViewById(R.id.changePictureButton)
         changePictureButton.setOnClickListener {
-           // val intent = Intent()
-            //intent.action = Intent.ACTION_GET_CONTENT
-            //intent.type = "image/*"
-            //startActivityForResult(intent,1)
-
-           // galleryLauncher.launch("image/*")
-
 
             AlertDialog
                 .Builder(this)
@@ -196,15 +188,6 @@ class RegisterUserActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
             }
-            /*
-            if(selectedImageUri == null)
-            {
-                Toast.makeText(this,"Please choose an image",Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-             */
-
 
             auth.createUserWithEmailAndPassword(emailInput, passwordInput)
                 .addOnCompleteListener {
@@ -241,39 +224,7 @@ class RegisterUserActivity : AppCompatActivity() {
     private fun uploadProfilePic() {
 
         val reference = firebaseStorage.reference.child("User Images").child(auth.currentUser!!.uid)
-        //reference.putFile(selectedImageUri)
         reference.putFile(tempUri)
-        /*
-        reference.putFile(selectedImageUri).addOnCompleteListener {
-            if (it.isSuccessful) {
-
-                Toast.makeText(this,"Image added in storage",Toast.LENGTH_SHORT).show()
-            }
-            else
-            {
-                Toast.makeText(this,"Image not added in storage",Toast.LENGTH_SHORT).show()
-                finalImageUri = "BLAh"
-            }
-
-        }
-
-         */
-        //Toast.makeText(this,"Image added in storage"+ finalImageUri,Toast.LENGTH_LONG).show()
     }
 
-    /*
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(data !=null){
-
-            if(data.data !=null)
-            {
-                selectedImageUri = data.data!!
-                profileImageView.setImageURI(selectedImageUri)
-            }
-        }
-    }
-
-     */
 }

@@ -1,6 +1,9 @@
 package com.example.hanger
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.*
@@ -20,9 +23,7 @@ class LogInActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var logIn: Button
     private lateinit var progressDialog: ProgressBar
-
     private lateinit var forgotPassword: TextView
-
     private lateinit var  auth: FirebaseAuth
     private lateinit var imageView: ImageView
     private var currentUser: FirebaseUser? = null
@@ -46,27 +47,18 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
-        //check permission
+       // setUpWallpaper()
+
+        initialize()  //set up variables
+
         Util.checkPermissions(this)
         supportActionBar?.hide()
 
-        imageView = findViewById(R.id.imageView2)
-        imageView.setImageResource(R.drawable.logo)
-        forgotPassword = findViewById(R.id.forgotPasswordTextView)
 
-        register = findViewById(R.id.registerTextView)
         register.setOnClickListener {
-            var intent: Intent =Intent(this, RegisterUserActivity::class.java)
-            startActivity(intent)
+            registerOnCLick()
         }
 
-        email = findViewById(R.id.editTextTextEmailAddress)
-        password = findViewById(R.id.editTextTextPassword)
-        logIn = findViewById(R.id.button)
-        progressDialog = findViewById(R.id.progressBar)
-        auth = FirebaseAuth.getInstance()
-
-        currentUser = FirebaseAuth.getInstance().currentUser
 
         if (currentUser != null) {
             val intent: Intent = Intent(this, MainActivity::class.java)
@@ -74,11 +66,21 @@ class LogInActivity : AppCompatActivity() {
         }
 
         forgotPassword.setOnClickListener {
-            var intent: Intent = Intent(this, ForgotPasswordActivity::class.java)
-            startActivity(intent)
+            forgotPasswordOnClick()
         }
 
+        logInOnClick()
+    }
+
+    private fun forgotPasswordOnClick() {
+        var intent: Intent = Intent(this, ForgotPasswordActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun logInOnClick() {
         logIn.setOnClickListener {
+
+            logInOnClick()
             var emailInput: String = email.text.toString()
             var passwordInput: String = password.text.toString()
 
@@ -107,21 +109,47 @@ class LogInActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
             }
-                //progressDialog.visibility = View.VISIBLE
-                auth.signInWithEmailAndPassword(emailInput, passwordInput).addOnCompleteListener {
+            //progressDialog.visibility = View.VISIBLE
+            auth.signInWithEmailAndPassword(emailInput, passwordInput).addOnCompleteListener {
 
-                    if (it.isSuccessful) {
+                if (it.isSuccessful) {
 
-                        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
 
-                                var intent: Intent = Intent(this, MainActivity::class.java)
-                                startActivity(intent)
-                        }
+                    var intent: Intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
 
-                     else {
-                        Toast.makeText(this, "Please enter correct Email and Password" , Toast.LENGTH_SHORT).show()
-                    }
+                else {
+                    Toast.makeText(this, "Please enter correct Email and Password" , Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    private fun registerOnCLick() {
+        var intent: Intent =Intent(this, RegisterUserActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun setUpWallpaper() {
+        var relativeLayout: RelativeLayout = findViewById(R.id.loginActivity)
+        val animationDrawable: AnimationDrawable = relativeLayout.background as AnimationDrawable
+        animationDrawable.setEnterFadeDuration(0)
+        animationDrawable.setExitFadeDuration(0)
+        animationDrawable.start()
+    }
+
+    private fun initialize(){
+        imageView = findViewById(R.id.imageView2)
+        imageView.setImageResource(R.drawable.logo)
+        forgotPassword = findViewById(R.id.forgotPasswordTextView)
+        email = findViewById(R.id.editTextTextEmailAddress)
+        password = findViewById(R.id.editTextTextPassword)
+        logIn = findViewById(R.id.button)
+        progressDialog = findViewById(R.id.progressBar)
+        auth = FirebaseAuth.getInstance()
+        register = findViewById(R.id.registerTextView)
+        currentUser = FirebaseAuth.getInstance().currentUser
     }
 }

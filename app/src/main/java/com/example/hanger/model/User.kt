@@ -1,7 +1,5 @@
 package com.example.hanger.model
 
-import android.provider.ContactsContract.CommonDataKinds.Email
-import java.util.jar.Attributes.Name
 /*
 class User {
 
@@ -26,5 +24,6 @@ class User {
     var id: String? = null,
     var name: String? = null,
     var email: String? = null,
-    var phone: String?  = null
+    var phone: String? = null,
+    var imgUrl: String? = null
 )

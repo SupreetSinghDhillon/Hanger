@@ -92,13 +92,13 @@ class ListingsActivity: AppCompatActivity() {
                 recyclerViewListings.adapter = listingAdapter
                 listingAdapter.setOnItemClickListener(object : ListingAdapter.onItemClickListener{
                     override fun onCardClicked(position: Int) {
-                        TODO()
+
                     }
                 })
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
         })
 

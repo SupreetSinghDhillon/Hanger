@@ -111,6 +111,11 @@ class ViewMyListingsActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 activeItemList.clear()
                 inactiveItemList.clear()
+                // calling this again as the corner case of last item being deleted
+                val itemAdapter = ListingAdapter(activeItemList) // active listings adapter
+                val itemAdapter2 = ListingAdapter(inactiveItemList) // inactive listings adapter
+                listOfActiveItemsRecyclerView.adapter = itemAdapter
+                listOfInactiveItemsRecyclerView.adapter = itemAdapter2
                 if (snapshot.exists()){ // if data exists
                     for (itemSnap in snapshot.children){
                         val itemData = itemSnap.getValue(ListingItemsModel:: class.java)
@@ -121,8 +126,9 @@ class ViewMyListingsActivity : AppCompatActivity() {
                         }
 
                     }
-                    val itemAdapter = ListingAdapter(activeItemList)
-                    val itemAdapter2 = ListingAdapter(inactiveItemList)
+                    // call again for adding items
+                    val itemAdapter = ListingAdapter(activeItemList) // active listings adapter
+                    val itemAdapter2 = ListingAdapter(inactiveItemList) // inactive listings adapter
                     listOfActiveItemsRecyclerView.adapter = itemAdapter
                     listOfInactiveItemsRecyclerView.adapter = itemAdapter2
 
@@ -139,7 +145,6 @@ class ViewMyListingsActivity : AppCompatActivity() {
                             myIntent.putExtra("itemCategory", activeItemList[position].itemCategory)
                             myIntent.putExtra("itemDesc", activeItemList[position].itemDesc)
                             myIntent.putExtra("itemActive", activeItemList[position].isActive)
-                            // TODO: missing put image
                             startActivity(myIntent)
                         }
                     })
@@ -157,7 +162,6 @@ class ViewMyListingsActivity : AppCompatActivity() {
                             myIntent.putExtra("itemCategory", inactiveItemList[position].itemCategory)
                             myIntent.putExtra("itemDesc", inactiveItemList[position].itemDesc)
                             myIntent.putExtra("itemActive", inactiveItemList[position].isActive)
-                            // TODO: missing put image
                             startActivity(myIntent)
                         }
                     })
@@ -171,48 +175,5 @@ class ViewMyListingsActivity : AppCompatActivity() {
         }
         )
     }
-
-    // show active listings card
-//    private fun fetchActiveListings () {
-//        database = FirebaseDatabase.getInstance().getReference("Listings")
-//        // filter to only showing the ones that the current user posted
-//        var queryGetActiveMyListings = database.orderByChild("ownerId").equalTo(loggedInUserId).orderByChild("isActive").equalTo(true)
-//       queryGetActiveMyListings.addValueEventListener(object : ValueEventListener{
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                activeItemList.clear()
-//                if (snapshot.exists()){ // if data exists
-//                    for (itemSnap in snapshot.children){
-//                        val itemData = itemSnap.getValue(ListingItemsModel:: class.java)
-//                        activeItemList.add(itemData!!)
-//                    }
-//                    val itemAdapter = ListingAdapter(activeItemList)
-//                    listOfItemsRecyclerView.adapter = itemAdapter
-//
-//                    itemAdapter.setOnItemClickListener(object : ListingAdapter.onItemClickListener{
-//                        override fun onCardClicked(position: Int) {
-//                            val myIntent = Intent(this@ViewMyListingsActivity, EditMyListingActivity::class.java)
-//                            // not passing in the ID and grabbing it from database in EditMyListingsActivity as this is easier
-//                            // but we can always change it later for a more efficient code
-//                            println("debug: first"+activeItemList[position].itemName)
-//                            myIntent.putExtra("itemId",activeItemList[position].itemId)
-//                            myIntent.putExtra("itemName", activeItemList[position].itemName)
-//                            myIntent.putExtra("itemPrice", activeItemList[position].itemPrice)
-//                            myIntent.putExtra("itemLocation", activeItemList[position].itemLocation)
-//                            myIntent.putExtra("itemCategory", activeItemList[position].itemCategory)
-//                            myIntent.putExtra("itemDesc", activeItemList[position].itemDesc)
-//                            myIntent.putExtra("itemActive", activeItemList[position].isActive)
-//                            // TODO: missing put image
-//                            startActivity(myIntent)
-//                        }
-//                    })
-//                }
-//            }
-//            override fun onCancelled(error: DatabaseError) {
-//                TODO("Not yet implemented")
-//            }
-//
-//        }
-//        )
-//    }
 
 }

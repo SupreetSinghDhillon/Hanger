@@ -85,10 +85,6 @@ class EditMyListingActivity : AppCompatActivity() {
             }
     }
 
-    private fun setNewValuesToUpdate () {
-
-    }
-
     fun updateListingOnClick (view: View) {
         // getting values
         var newListingName = itemName.text.toString()
@@ -112,8 +108,12 @@ class EditMyListingActivity : AppCompatActivity() {
         finish()
     }
 
+    fun deleteListingOnClick (view: View) {
+        database.child(itemId).removeValue()
+        finish()
+    }
+
     fun cancelEditListingOnClick (view: View) {
-        // unfinished
         finish()
     }
 }

@@ -99,7 +99,7 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
                     })
                 } else if (selectedFilter == "Price: High to Low") {
                     listings.sortWith(compareBy<ListingItemsModel> {
-                        it.itemPrice?.toDouble()   
+                        it.itemPrice?.toDouble()
                     })
                     listings.reverse()
                 } else {
@@ -127,7 +127,7 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
         })
 

@@ -178,6 +178,7 @@
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
                 android:text="Delete Listing"
+                android:onClick="deleteListingOnClick"
                 android:backgroundTint="@color/warning"/>
 
         </LinearLayout>

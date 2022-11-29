@@ -22,14 +22,21 @@ class ViewMyListingsActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var mDrawerLayout: DrawerLayout
     lateinit var mNavView: NavigationView
-    private lateinit var listOfItemsRecyclerView: RecyclerView
-    private lateinit var  itemList: ArrayList<ListingItemsModel>
+    private lateinit var listOfActiveItemsRecyclerView: RecyclerView
+    private lateinit var listOfInactiveItemsRecyclerView: RecyclerView
+    private lateinit var  activeItemList: ArrayList<ListingItemsModel>
+    private lateinit var  inactiveItemList: ArrayList<ListingItemsModel>
     private lateinit var database: DatabaseReference
+    lateinit var auth: FirebaseAuth
+    private lateinit var loggedInUserId: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_my_listings)
+        auth = FirebaseAuth.getInstance()
+        loggedInUserId = auth.currentUser?.uid.toString()
+        database = FirebaseDatabase.getInstance().getReference("Listings")
 
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mNavView = findViewById(R.id.navView)
@@ -70,12 +77,18 @@ class ViewMyListingsActivity : AppCompatActivity() {
         }
 
         // fetching data
-        listOfItemsRecyclerView = findViewById(R.id.myListingsItems)
-        listOfItemsRecyclerView.layoutManager = LinearLayoutManager(this)
-        listOfItemsRecyclerView.setHasFixedSize(true)
+        listOfActiveItemsRecyclerView = findViewById(R.id.myListingsItems)
+        listOfActiveItemsRecyclerView.layoutManager = LinearLayoutManager(this)
+        listOfActiveItemsRecyclerView.setHasFixedSize(true)
 
-        itemList = arrayListOf<ListingItemsModel>()
-        getItemListData()
+        // fetching data for inactive
+        listOfInactiveItemsRecyclerView = findViewById(R.id.myInactiveListingsItems)
+        listOfInactiveItemsRecyclerView.layoutManager = LinearLayoutManager(this)
+        listOfInactiveItemsRecyclerView.setHasFixedSize(true)
+
+        activeItemList = arrayListOf<ListingItemsModel>()
+        inactiveItemList = arrayListOf<ListingItemsModel>()
+        fetchListings()
 
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -91,36 +104,68 @@ class ViewMyListingsActivity : AppCompatActivity() {
         this.startActivity(myIntent)
     }
 
-    private fun getItemListData () {
-        database = FirebaseDatabase.getInstance().getReference("Listings")
-        database.addValueEventListener(object : ValueEventListener{
+    // show inactive listings card
+    private fun fetchListings () {
+        var queryGetInactiveMyListings = database.orderByChild("ownerId").equalTo(loggedInUserId)
+        queryGetInactiveMyListings.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                itemList.clear()
+                activeItemList.clear()
+                inactiveItemList.clear()
+                // calling this again as the corner case of last item being deleted
+                val itemAdapter = ListingAdapter(activeItemList) // active listings adapter
+                val itemAdapter2 = ListingAdapter(inactiveItemList) // inactive listings adapter
+                listOfActiveItemsRecyclerView.adapter = itemAdapter
+                listOfInactiveItemsRecyclerView.adapter = itemAdapter2
                 if (snapshot.exists()){ // if data exists
                     for (itemSnap in snapshot.children){
                         val itemData = itemSnap.getValue(ListingItemsModel:: class.java)
-                        itemList.add(itemData!!)
+                        if (itemData?.isActive == true) {
+                            activeItemList.add(itemData!!)
+                        } else {
+                            inactiveItemList.add(itemData!!)
+                        }
+
                     }
-                    val itemAdapter = ListingAdapter(itemList)
-                    listOfItemsRecyclerView.adapter = itemAdapter
+                    // call again for adding items
+                    val itemAdapter = ListingAdapter(activeItemList) // active listings adapter
+                    val itemAdapter2 = ListingAdapter(inactiveItemList) // inactive listings adapter
+                    listOfActiveItemsRecyclerView.adapter = itemAdapter
+                    listOfInactiveItemsRecyclerView.adapter = itemAdapter2
 
                     itemAdapter.setOnItemClickListener(object : ListingAdapter.onItemClickListener{
                         override fun onCardClicked(position: Int) {
                             val myIntent = Intent(this@ViewMyListingsActivity, EditMyListingActivity::class.java)
                             // not passing in the ID and grabbing it from database in EditMyListingsActivity as this is easier
                             // but we can always change it later for a more efficient code
-                            println("debug: first"+itemList[position].itemName)
-
                             myIntent.putExtra("editing", true)
 
-                            myIntent.putExtra("itemId",itemList[position].itemId)
-                            myIntent.putExtra("itemName", itemList[position].itemName)
-                            myIntent.putExtra("itemPrice", itemList[position].itemPrice)
-                            myIntent.putExtra("itemLocation", itemList[position].itemLocation)
-                            myIntent.putExtra("itemCategory", itemList[position].itemCategory)
-                            myIntent.putExtra("itemDesc", itemList[position].itemDesc)
-                            myIntent.putExtra("itemActive", itemList[position].isActive)
                             // TODO: missing put image
+                            println("debug: first"+activeItemList[position].itemName)
+                            myIntent.putExtra("itemId",activeItemList[position].itemId)
+                            myIntent.putExtra("itemName", activeItemList[position].itemName)
+                            myIntent.putExtra("itemPrice", activeItemList[position].itemPrice)
+                            myIntent.putExtra("itemLocation", activeItemList[position].itemLocation)
+                            myIntent.putExtra("itemCategory", activeItemList[position].itemCategory)
+                            myIntent.putExtra("itemDesc", activeItemList[position].itemDesc)
+                            myIntent.putExtra("itemActive", activeItemList[position].isActive)
+                            startActivity(myIntent)
+                        }
+                    })
+
+                    itemAdapter2.setOnItemClickListener(object : ListingAdapter.onItemClickListener{
+                        override fun onCardClicked(position: Int) {
+                            val myIntent = Intent(this@ViewMyListingsActivity, EditMyListingActivity::class.java)
+                            // not passing in the ID and grabbing it from database in EditMyListingsActivity as this is easier
+                            // but we can always change it later for a more efficient code
+                            myIntent.putExtra("editing", true)
+                            println("debug: first"+inactiveItemList[position].itemName)
+                            myIntent.putExtra("itemId",inactiveItemList[position].itemId)
+                            myIntent.putExtra("itemName", inactiveItemList[position].itemName)
+                            myIntent.putExtra("itemPrice", inactiveItemList[position].itemPrice)
+                            myIntent.putExtra("itemLocation", inactiveItemList[position].itemLocation)
+                            myIntent.putExtra("itemCategory", inactiveItemList[position].itemCategory)
+                            myIntent.putExtra("itemDesc", inactiveItemList[position].itemDesc)
+                            myIntent.putExtra("itemActive", inactiveItemList[position].isActive)
                             startActivity(myIntent)
                         }
                     })

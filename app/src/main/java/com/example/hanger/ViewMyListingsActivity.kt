@@ -110,6 +110,9 @@ class ViewMyListingsActivity : AppCompatActivity() {
                             // not passing in the ID and grabbing it from database in EditMyListingsActivity as this is easier
                             // but we can always change it later for a more efficient code
                             println("debug: first"+itemList[position].itemName)
+
+                            myIntent.putExtra("editing", true)
+
                             myIntent.putExtra("itemId",itemList[position].itemId)
                             myIntent.putExtra("itemName", itemList[position].itemName)
                             myIntent.putExtra("itemPrice", itemList[position].itemPrice)

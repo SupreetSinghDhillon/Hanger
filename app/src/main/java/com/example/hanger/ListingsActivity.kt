@@ -1,5 +1,6 @@
 package com.example.hanger
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
@@ -22,6 +23,8 @@ class ListingsActivity: AppCompatActivity() {
     lateinit var mDrawerLayout: DrawerLayout
     lateinit var mNavView: NavigationView
 
+
+    private lateinit var listingsContext: Context
     private lateinit var textViewCategory: TextView
     private lateinit var recyclerViewListings: RecyclerView
     private lateinit var listings: ArrayList<ListingItemsModel>
@@ -30,6 +33,8 @@ class ListingsActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_listings)
+
+        listingsContext = this
 
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mNavView = findViewById(R.id.navView)
@@ -90,9 +95,20 @@ class ListingsActivity: AppCompatActivity() {
                 }
                 val listingAdapter = ListingAdapter(listings)
                 recyclerViewListings.adapter = listingAdapter
-                listingAdapter.setOnItemClickListener(object : ListingAdapter.onItemClickListener{
+                listingAdapter.setOnItemClickListener(object : ListingAdapter.onItemClickListener {
                     override fun onCardClicked(position: Int) {
-                        TODO()
+                        val intent = Intent(listingsContext, EditMyListingActivity::class.java)
+                        intent.putExtra("editing", false)
+
+                        intent.putExtra("itemId", listings[position].itemId)
+                        intent.putExtra("itemName", listings[position].itemName)
+                        intent.putExtra("itemPrice", listings[position].itemPrice)
+                        intent.putExtra("itemLocation", listings[position].itemLocation)
+                        intent.putExtra("itemCategory", listings[position].itemCategory)
+                        intent.putExtra("itemDesc", listings[position].itemDesc)
+                        intent.putExtra("itemActive", listings[position].isActive)
+                        // TODO: missing put image
+                        startActivity(intent)
                     }
                 })
             }

@@ -22,6 +22,15 @@ class EditMyListingActivity : AppCompatActivity() {
     private lateinit var itemIsActive: RadioButton
     private lateinit var itemPicture: ImageView
     private lateinit var itemId: String
+
+    private lateinit var btnContact: Button
+    private lateinit var btnUpdateListing: Button
+    private lateinit var btnCancelEditListing: Button
+    private lateinit var btnDeleteListing: Button
+    private lateinit var btnUpdateListingPicture: Button
+
+    private var isEditing: Boolean = false
+
     val arrayOfCategory = arrayOf("Casual", "Prom", "Suits", "Wedding", "Ethnic Wear", "Other" )
     // private lateinit var updateListing: Button
     // private lateinit var database: DatabaseReference
@@ -35,6 +44,8 @@ class EditMyListingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_my_listing)
 
+        isEditing = intent.getBooleanExtra("editing", false)
+
         itemName = findViewById(R.id.editListingName)
         itemPrice = findViewById(R.id.editListingPrice)
         itemLocation = findViewById(R.id.editListingLocation)
@@ -43,6 +54,43 @@ class EditMyListingActivity : AppCompatActivity() {
         itemIsActive = findViewById(R.id.radioActive)
         itemCategorySpinner = findViewById(R.id.editListingCategories)
         itemPicture = findViewById(R.id.editItemPicture)
+
+        btnContact = findViewById(R.id.buttonContact)
+        btnUpdateListing = findViewById(R.id.buttonUpdateListing)
+        btnCancelEditListing = findViewById(R.id.buttonCancelEditListing)
+        btnDeleteListing = findViewById(R.id.buttonDeleteListing)
+        btnUpdateListingPicture = findViewById(R.id.buttonUpdateListingPicture)
+
+        if (!isEditing) {
+            itemName.isEnabled = false
+            itemPrice.isEnabled = false
+            itemLocation.isEnabled = false
+            itemDesc.isEnabled = false
+            itemInactive.visibility = View.INVISIBLE
+            itemIsActive.visibility = View.INVISIBLE
+            itemCategorySpinner.isEnabled = false
+//            itemPicture.isEnabled = false
+
+            btnUpdateListingPicture.visibility = View.INVISIBLE
+            btnContact.visibility = View.VISIBLE
+            btnUpdateListing.visibility = View.INVISIBLE
+            btnCancelEditListing.visibility = View.INVISIBLE
+            btnDeleteListing.visibility = View.INVISIBLE
+        } else {
+            itemName.isEnabled = true
+            itemPrice.isEnabled = true
+            itemLocation.isEnabled = true
+            itemDesc.isEnabled = true
+            itemInactive.visibility = View.VISIBLE
+            itemIsActive.visibility = View.VISIBLE
+            itemCategorySpinner.isEnabled = true
+
+            btnUpdateListingPicture.visibility = View.VISIBLE
+            btnContact.visibility = View.INVISIBLE
+            btnUpdateListing.visibility = View.VISIBLE
+            btnCancelEditListing.visibility = View.VISIBLE
+            btnDeleteListing.visibility = View.VISIBLE
+        }
 
         setOriginalValuesToFields()
 
@@ -80,6 +128,10 @@ class EditMyListingActivity : AppCompatActivity() {
 
     private fun setNewValuesToUpdate () {
 
+    }
+
+    fun contactSeller(view: View) {
+        TODO("link with nav chat")
     }
 
     fun updateListingOnClick (view: View) {

@@ -157,23 +157,10 @@ class UserAddListingActivity : AppCompatActivity() {
         newListingCategory = inputCategorySpinner.selectedItemPosition
 
         // pushing to listings table
-        //val itemId = database.push().key!!
-        itemId = database.push().key!!
-        val item = ListingItemsModel(itemId, newListingName, newListingPrice, newListingLocation, newListingDesc, newListingCategory, true)
-        database.child(itemId).setValue(item).addOnCompleteListener{
-            uploadItemPic()
-            Toast.makeText(this, "Listing created successfully!", Toast.LENGTH_LONG).show()
-        }.addOnFailureListener{ err->
-            Toast.makeText(this, "Error ${err.message}", Toast.LENGTH_LONG).show()
-        }
+        FirebaseUtil.addListing(newListingName, newListingPrice, newListingLocation,
+            newListingDesc!!, newListingCategory, true, tempUri)
         finish()
     }
-
-    private fun uploadItemPic() {
-        val reference = firebaseStorage.reference.child("Item Images").child(itemId)
-        reference.putFile(tempUri)
-    }
-
 
     fun cancelListingOnClick(view: View){
         finish()

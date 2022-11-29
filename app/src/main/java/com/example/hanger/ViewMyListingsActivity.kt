@@ -107,14 +107,14 @@ class ViewMyListingsActivity : AppCompatActivity() {
 
     private fun fetchListings () {
         val context = this
-        var queryGetInactiveMyListings = database.orderByChild("ownerId").equalTo(loggedInUserId)
+        var queryGetInactiveMyListings = database.orderByChild("userId").equalTo(loggedInUserId)
         queryGetInactiveMyListings.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 activeItemList.clear()
                 inactiveItemList.clear()
                 // calling this again as the corner case of last item being deleted
-                val itemAdapter = ListingAdapter(activeItemList) // active listings adapter
-                val itemAdapter2 = ListingAdapter(inactiveItemList) // inactive listings adapter
+                val itemAdapter = ListingAdapter(activeItemList, context) // active listings adapter
+                val itemAdapter2 = ListingAdapter(inactiveItemList, context) // inactive listings adapter
                 listOfActiveItemsRecyclerView.adapter = itemAdapter
                 listOfInactiveItemsRecyclerView.adapter = itemAdapter2
                 if (snapshot.exists()){ // if data exists

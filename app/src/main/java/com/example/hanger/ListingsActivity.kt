@@ -113,7 +113,7 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
                     override fun onCardClicked(position: Int) {
                         val intent = Intent(listingsContext, EditMyListingActivity::class.java)
                         intent.putExtra("editing", false)
-
+                        intent.putExtra("userId", listings[position].userId)
                         intent.putExtra("itemId", listings[position].itemId)
                         intent.putExtra("itemName", listings[position].itemName)
                         intent.putExtra("itemPrice", listings[position].itemPrice)

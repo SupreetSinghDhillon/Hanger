@@ -1,5 +1,6 @@
 package com.example.hanger
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
@@ -38,6 +39,7 @@ class EditMyListingActivity : AppCompatActivity() {
     val arrayOfCategory = arrayOf("Casual", "Prom", "Suits", "Wedding", "Ethnic Wear", "Other" )
     // private lateinit var updateListing: Button
     // private lateinit var database: DatabaseReference
+    private lateinit var userId: String
 
 
     // TODO: update the database on update button
@@ -100,7 +102,11 @@ class EditMyListingActivity : AppCompatActivity() {
         }
 
         setOriginalValuesToFields()
-
+        btnContact.setOnClickListener {
+            val intent: Intent = Intent(this, MessageActivity::class.java)
+            intent.putExtra("userid", userId)
+            this.startActivity(intent)
+        }
     }
 
     private fun setOriginalValuesToFields () {
@@ -119,6 +125,7 @@ class EditMyListingActivity : AppCompatActivity() {
             itemInactive.isChecked = true
         }
         getItemPicture()
+        userId = intent.getStringExtra("userId")!!
     }
 
     private fun getItemPicture() {
@@ -135,10 +142,6 @@ class EditMyListingActivity : AppCompatActivity() {
 
     private fun setNewValuesToUpdate () {
 
-    }
-
-    fun contactSeller(view: View) {
-        TODO("link with nav chat")
     }
 
     fun updateListingOnClick (view: View) {

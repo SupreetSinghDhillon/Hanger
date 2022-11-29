@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp">
 
@@ -21,5 +21,17 @@
         android:textSize="16sp"
         />
 
+    <TextView
+        android:id="@+id/lastMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username"
+        android:layout_toEndOf="@id/avatar_image"
+        android:layout_marginTop="5dp"
+        android:paddingTop="5dp"
+        android:textColor="@color/design_default_color_primary_dark"
+        android:layout_marginLeft="20dp"
+        android:maxLines="1"
 
+        />
 </RelativeLayout>

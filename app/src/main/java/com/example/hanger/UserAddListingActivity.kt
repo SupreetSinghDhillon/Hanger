@@ -40,7 +40,6 @@ class UserAddListingActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var newListingName: String
     private lateinit var newListingPrice: String
-    private lateinit var newListingOwnerId: String
     private lateinit var auth: FirebaseAuth
     lateinit var tempUri: Uri
     private lateinit var newListingLocation: String
@@ -156,12 +155,11 @@ class UserAddListingActivity : AppCompatActivity() {
         newListingLocation = itemLocation.text.toString()
         newListingDesc = itemDesc.text.toString()
         newListingCategory = inputCategorySpinner.selectedItemPosition
-        newListingOwnerId = auth.currentUser?.uid.toString()
 
         // pushing to listings table
         //val itemId = database.push().key!!
         itemId = database.push().key!!
-        val item = ListingItemsModel(newListingOwnerId, itemId, newListingName, newListingPrice, newListingLocation, newListingDesc, newListingCategory, true)
+        val item = ListingItemsModel(auth.currentUser?.uid, itemId, newListingName, newListingPrice, newListingLocation, newListingDesc, newListingCategory, true)
         database.child(itemId).setValue(item).addOnCompleteListener{
             uploadItemPic()
             Toast.makeText(this, "Listing created successfully!", Toast.LENGTH_LONG).show()

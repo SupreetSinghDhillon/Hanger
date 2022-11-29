@@ -83,6 +83,7 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
         println("debug: category is $category")
         db = Firebase.database.reference.child("Listings")
         val categoryQuery = db.orderByChild("itemCategory").equalTo(category.toDouble())
+        val context = this
         categoryQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 //                println("debug: snapshot is $snapshot")
@@ -106,7 +107,7 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
                     listings.reverse()
                 }
 
-                val listingAdapter = ListingAdapter(listings)
+                val listingAdapter = ListingAdapter(listings, context)
                 recyclerViewListings.adapter = listingAdapter
                 listingAdapter.setOnItemClickListener(object : ListingAdapter.onItemClickListener {
                     override fun onCardClicked(position: Int) {

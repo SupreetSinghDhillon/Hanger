@@ -1,21 +1,25 @@
 package com.example.hanger.adapters
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hanger.MessageActivity
 import com.example.hanger.R
 import com.example.hanger.model.ListingItemsModel
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.File
 
-class ListingAdapter (private val itemList: ArrayList<ListingItemsModel>) : RecyclerView.Adapter <ListingAdapter.ViewHolder>(){
+class ListingAdapter (private val itemList: ArrayList<ListingItemsModel>, private val context: Context) : RecyclerView.Adapter <ListingAdapter.ViewHolder>(){
     private lateinit var mListener: onItemClickListener
     lateinit var storageReference: StorageReference
 
@@ -43,11 +47,17 @@ class ListingAdapter (private val itemList: ArrayList<ListingItemsModel>) : Recy
         storageReference.getFile(localFile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
             holder.imageView.setImageBitmap(bitmap)
+        }.addOnFailureListener{
+           // Toast.makeText(this,"Image upload failed", Toast.LENGTH_SHORT).show()
         }
-            .addOnFailureListener{
-               // Toast.makeText(this,"Image upload failed", Toast.LENGTH_SHORT).show()
-            }
 
+        holder.chatButton.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(p0: View?) {
+                val intent: Intent = Intent(context, MessageActivity::class.java)
+                intent.putExtra("userid", currItem.userId)
+                context.startActivity(intent)
+            }
+        })
     }
 
     override fun getItemCount(): Int {
@@ -60,6 +70,7 @@ class ListingAdapter (private val itemList: ArrayList<ListingItemsModel>) : Recy
         val tvItemPrice: TextView = itemView.findViewById(R.id.textViewPrice)
         val tvItemLocation: TextView = itemView.findViewById(R.id.textViewLocation)
         val imageView: ImageView = itemView.findViewById(R.id.imageViewPicture)
+        val chatButton: Button = itemView.findViewById((R.id.chat))
 
         init {
             itemView.setOnClickListener{

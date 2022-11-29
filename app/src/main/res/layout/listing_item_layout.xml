@@ -53,6 +53,12 @@
                 android:layout_height="wrap_content"
                 android:text="Location"
                 android:layout_margin="7dp"/>
+
+            <Button
+                android:id="@+id/chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chat Now" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.hanger.model.ListingItemsModel
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.File
@@ -22,6 +24,8 @@ class EditMyListingActivity : AppCompatActivity() {
     private lateinit var itemIsActive: RadioButton
     private lateinit var itemPicture: ImageView
     private lateinit var itemId: String
+    private var listingIsActive: Boolean = true
+    private lateinit var database: DatabaseReference
     val arrayOfCategory = arrayOf("Casual", "Prom", "Suits", "Wedding", "Ethnic Wear", "Other" )
     // private lateinit var updateListing: Button
     // private lateinit var database: DatabaseReference
@@ -35,6 +39,9 @@ class EditMyListingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_my_listing)
 
+        //get db
+        database = FirebaseDatabase.getInstance().getReference("Listings")
+        itemId = intent.getStringExtra("itemId")!!
         itemName = findViewById(R.id.editListingName)
         itemPrice = findViewById(R.id.editListingPrice)
         itemLocation = findViewById(R.id.editListingLocation)
@@ -50,7 +57,7 @@ class EditMyListingActivity : AppCompatActivity() {
 
     private fun setOriginalValuesToFields () {
         println("debug"+intent.getStringExtra("itemName"))
-        itemId = intent.getStringExtra("itemId")!!
+
         itemName.setText(intent.getStringExtra("itemName"))
         itemPrice.setText(intent.getStringExtra("itemPrice"))
         itemLocation.setText(intent.getStringExtra("itemLocation"))
@@ -83,7 +90,25 @@ class EditMyListingActivity : AppCompatActivity() {
     }
 
     fun updateListingOnClick (view: View) {
-        // unfinished
+        // getting values
+        var newListingName = itemName.text.toString()
+        var newListingPrice = itemPrice.text.toString()
+        var newListingLocation = itemLocation.text.toString()
+        var newListingDesc = itemDesc.text.toString()
+        var newListingCategory = itemCategorySpinner.selectedItemPosition
+        if (itemIsActive.isChecked){
+            listingIsActive = true
+        } else if (itemInactive.isChecked){
+            listingIsActive = false
+        }
+        // update every field (assume everything is changed)
+        database.child(itemId).child("itemName").setValue(newListingName);
+        database.child(itemId).child("itemPrice").setValue(newListingPrice);
+        database.child(itemId).child("itemLocation").setValue(newListingLocation);
+        database.child(itemId).child("itemCategory").setValue(newListingCategory);
+        database.child(itemId).child("itemDesc").setValue(newListingDesc);
+        database.child(itemId).child("active").setValue(listingIsActive);
+
         finish()
     }
 

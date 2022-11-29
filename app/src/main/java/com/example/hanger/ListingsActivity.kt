@@ -34,7 +34,7 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
     private lateinit var textViewCategory: TextView
     private lateinit var recyclerViewListings: RecyclerView
     private lateinit var listings: ArrayList<ListingItemsModel>
-    private lateinit var dateOrderedListings: ArrayList<ListingItemsModel>
+//    private lateinit var dateOrderedListings: ArrayList<ListingItemsModel>
     private lateinit var db: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,9 +89,10 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
                 listings.clear()
                 for (data in snapshot.children) {
                     val listing = data.getValue<ListingItemsModel>()
-                    listings.add(listing!!)
+                    if (listing!!.isActive) {
+                        listings.add(listing)
+                    }
                 }
-                dateOrderedListings = ArrayList(listings.map{it.copy()})
                 if (selectedFilter == "Price: Low to High") {
                     listings.sortWith(compareBy<ListingItemsModel> {
                         it.itemPrice?.toDouble()
@@ -100,6 +101,8 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
                     listings.sortWith(compareBy<ListingItemsModel> {
                         it.itemPrice?.toDouble()   
                     })
+                    listings.reverse()
+                } else {
                     listings.reverse()
                 }
 

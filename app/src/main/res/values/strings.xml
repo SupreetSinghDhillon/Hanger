@@ -29,4 +29,10 @@
         <item>Hype</item>
         <item>Ethnic Wear</item>
     </string-array>
+
+    <string-array name="array_filters">
+        <item>Date</item>
+        <item>Price: Low to High</item>
+        <item>Price: High to Low</item>
+    </string-array>
 </resources>

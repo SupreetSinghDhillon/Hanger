@@ -137,6 +137,9 @@ class ViewMyListingsActivity : AppCompatActivity() {
                             val myIntent = Intent(this@ViewMyListingsActivity, EditMyListingActivity::class.java)
                             // not passing in the ID and grabbing it from database in EditMyListingsActivity as this is easier
                             // but we can always change it later for a more efficient code
+                            myIntent.putExtra("editing", true)
+
+                            // TODO: missing put image
                             println("debug: first"+activeItemList[position].itemName)
                             myIntent.putExtra("itemId",activeItemList[position].itemId)
                             myIntent.putExtra("itemName", activeItemList[position].itemName)
@@ -154,6 +157,7 @@ class ViewMyListingsActivity : AppCompatActivity() {
                             val myIntent = Intent(this@ViewMyListingsActivity, EditMyListingActivity::class.java)
                             // not passing in the ID and grabbing it from database in EditMyListingsActivity as this is easier
                             // but we can always change it later for a more efficient code
+                            myIntent.putExtra("editing", true)
                             println("debug: first"+inactiveItemList[position].itemName)
                             myIntent.putExtra("itemId",inactiveItemList[position].itemId)
                             myIntent.putExtra("itemName", inactiveItemList[position].itemName)

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.FileUtils
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -41,6 +42,7 @@ class RegisterUserActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
     lateinit var tempUri: Uri
+    var profileImageSelected = false
     lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     lateinit var galleryLauncher: ActivityResultLauncher<String>
     var imageChanged: Int = 0
@@ -95,6 +97,7 @@ class RegisterUserActivity : AppCompatActivity() {
                val imageBitmap = Util.getBitmap(this, tempUri)
                // finalImageUri = tempUri.toString()
                 profileImageView.setImageBitmap(imageBitmap)
+                profileImageSelected = true
             }
         }
 
@@ -143,14 +146,7 @@ class RegisterUserActivity : AppCompatActivity() {
 
         }
 
-
-
-
-
-
         register.setOnClickListener {
-
-
             var emailInput: String = email.text.toString()
             var passwordInput: String = password.text.toString()
             var nameInput = name.text.toString()
@@ -188,9 +184,6 @@ class RegisterUserActivity : AppCompatActivity() {
 
             auth.createUserWithEmailAndPassword(emailInput, passwordInput)
                 .addOnCompleteListener {
-
-
-
                     if (it.isSuccessful) {
                        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
                         val userId = it.result.user!!.uid.toString()
@@ -213,15 +206,17 @@ class RegisterUserActivity : AppCompatActivity() {
 
                     } else {
                         Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+                        Log.d("ERROR", it.exception.toString())
                     }
                 }
         }
     }
 
     private fun uploadProfilePic() {
-
-        val reference = firebaseStorage.reference.child("User Images").child(auth.currentUser!!.uid)
-        reference.putFile(tempUri)
+        if(profileImageSelected) {
+            val reference =
+                firebaseStorage.reference.child("User Images").child(auth.currentUser!!.uid)
+            reference.putFile(tempUri)
+        }
     }
-
 }

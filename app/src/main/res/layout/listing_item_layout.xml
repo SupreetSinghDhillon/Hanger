@@ -52,7 +52,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Location"
-                android:layout_margin="7dp"/>
+                android:layout_margin="7dp"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contact" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

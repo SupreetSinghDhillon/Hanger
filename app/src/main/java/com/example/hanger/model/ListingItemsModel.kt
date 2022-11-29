@@ -1,7 +1,7 @@
 package com.example.hanger.model
 
 data class ListingItemsModel (
-    var ownerId: String = "No owner",
+    var userId: String? = "",
     var itemId: String? = null,
     var itemName: String? = "No name",
     var itemPrice: String? = "No price",

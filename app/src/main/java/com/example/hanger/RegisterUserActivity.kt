@@ -22,7 +22,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.xd.camerademokotlin.Util
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.concurrent.thread
@@ -194,10 +196,13 @@ class RegisterUserActivity : AppCompatActivity() {
                             phoneInput
                         )
 
-                        database.child(userId).setValue(user).addOnCompleteListener {
-                            if(it.isSuccessful){
-                                uploadProfilePic()
-                                Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                        CoroutineScope(IO).launch {
+                            database.child(userId).setValue(user).addOnCompleteListener {
+                                if(it.isSuccessful){
+                                    uploadProfilePic()
+                                    println("debug: registration success")
+//                                    Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+                                }
                             }
                         }
 

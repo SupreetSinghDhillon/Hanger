@@ -122,7 +122,7 @@ class UserAddListingActivity : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult()
         ) { it: ActivityResult ->
             if (it.resultCode == Activity.RESULT_OK) {
-                val imageBitmap = com.xd.camerademokotlin.Util.getBitmap(this, tempUri)
+                val imageBitmap = com.example.hanger.Util.getBitmap(this, tempUri)
                 // finalImageUri = tempUri.toString()
                 itemPicture.setImageBitmap(imageBitmap)
             }

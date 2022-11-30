@@ -38,43 +38,43 @@ class ViewMyListingsActivity : AppCompatActivity() {
         loggedInUserId = auth.currentUser?.uid.toString()
         database = FirebaseDatabase.getInstance().getReference("Listings")
 
-        mDrawerLayout = findViewById(R.id.drawerLayout);
-        mNavView = findViewById(R.id.navView)
+//        mDrawerLayout = findViewById(R.id.drawerLayout);
+//        mNavView = findViewById(R.id.navView)
 
-        toggle = ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close)
-        mDrawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+//        toggle = ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close)
+//        mDrawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
+//
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        // hamburger menu
-        mNavView.setNavigationItemSelectedListener {
-
-            when (it.itemId) {
-                R.id.profile -> {
-                    var intent: Intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.browseListings -> {
-                    var intent: Intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.myListings -> {
-                    var intent: Intent = Intent(this, ViewMyListingsActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.messages -> {
-                    var intent: Intent = Intent(this, MessagesActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.logout -> {
-                    FirebaseAuth.getInstance().signOut();
-                    var intent: Intent = Intent(this, LogInActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-            true
-        }
+//        // hamburger menu
+//        mNavView.setNavigationItemSelectedListener {
+//
+//            when (it.itemId) {
+//                R.id.profile -> {
+//                    var intent: Intent = Intent(this, ProfileActivity::class.java)
+//                    startActivity(intent)
+//                }
+//                R.id.browseListings -> {
+//                    var intent: Intent = Intent(this, MainActivity::class.java)
+//                    startActivity(intent)
+//                }
+//                R.id.myListings -> {
+//                    var intent: Intent = Intent(this, ViewMyListingsActivity::class.java)
+//                    startActivity(intent)
+//                }
+//                R.id.messages -> {
+//                    var intent: Intent = Intent(this, MessagesActivity::class.java)
+//                    startActivity(intent)
+//                }
+//                R.id.logout -> {
+//                    FirebaseAuth.getInstance().signOut();
+//                    var intent: Intent = Intent(this, LogInActivity::class.java)
+//                    startActivity(intent)
+//                }
+//            }
+//            true
+//        }
 
         // fetching data
         listOfActiveItemsRecyclerView = findViewById(R.id.myListingsItems)
@@ -142,6 +142,7 @@ class ViewMyListingsActivity : AppCompatActivity() {
 
                             // TODO: missing put image
                             println("debug: first"+activeItemList[position].itemName)
+                            myIntent.putExtra("userId", activeItemList[position].userId)
                             myIntent.putExtra("itemId",activeItemList[position].itemId)
                             myIntent.putExtra("itemName", activeItemList[position].itemName)
                             myIntent.putExtra("itemPrice", activeItemList[position].itemPrice)
@@ -160,6 +161,7 @@ class ViewMyListingsActivity : AppCompatActivity() {
                             // but we can always change it later for a more efficient code
                             myIntent.putExtra("editing", true)
                             println("debug: first"+inactiveItemList[position].itemName)
+                            myIntent.putExtra("userId", inactiveItemList[position].userId)
                             myIntent.putExtra("itemId",inactiveItemList[position].itemId)
                             myIntent.putExtra("itemName", inactiveItemList[position].itemName)
                             myIntent.putExtra("itemPrice", inactiveItemList[position].itemPrice)

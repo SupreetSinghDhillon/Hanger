@@ -1,4 +1,4 @@
-package com.xd.camerademokotlin
+package com.example.hanger
 
 import android.Manifest
 import android.app.Activity

@@ -21,6 +21,9 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener {
     lateinit var toggle: ActionBarDrawerToggle
@@ -87,6 +90,7 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
         categoryQuery.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 //                println("debug: snapshot is $snapshot")
+
                 listings.clear()
                 for (data in snapshot.children) {
                     val listing = data.getValue<ListingItemsModel>()
@@ -125,6 +129,8 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
                         startActivity(intent)
                     }
                 })
+
+
             }
 
             override fun onCancelled(error: DatabaseError) {

@@ -25,6 +25,7 @@ class EditMyListingActivity : AppCompatActivity() {
     private lateinit var itemIsActive: RadioButton
     private lateinit var itemPicture: ImageView
     private lateinit var itemId: String
+    private lateinit var textViewStatus: TextView
 
     private lateinit var btnContact: Button
     private lateinit var btnUpdateListing: Button
@@ -55,6 +56,8 @@ class EditMyListingActivity : AppCompatActivity() {
         itemId = intent.getStringExtra("itemId")!!
         isEditing = intent.getBooleanExtra("editing", false)
 
+        textViewStatus = findViewById(R.id.textViewStatus)
+
         itemName = findViewById(R.id.editListingName)
         itemPrice = findViewById(R.id.editListingPrice)
         itemLocation = findViewById(R.id.editListingLocation)
@@ -79,6 +82,7 @@ class EditMyListingActivity : AppCompatActivity() {
             itemIsActive.visibility = View.INVISIBLE
             itemCategorySpinner.isEnabled = false
 //            itemPicture.isEnabled = false
+            textViewStatus.visibility = View.INVISIBLE
 
             btnUpdateListingPicture.visibility = View.INVISIBLE
             btnContact.visibility = View.VISIBLE
@@ -93,6 +97,7 @@ class EditMyListingActivity : AppCompatActivity() {
             itemInactive.visibility = View.VISIBLE
             itemIsActive.visibility = View.VISIBLE
             itemCategorySpinner.isEnabled = true
+            textViewStatus.visibility = View.VISIBLE
 
             btnUpdateListingPicture.visibility = View.VISIBLE
             btnContact.visibility = View.INVISIBLE

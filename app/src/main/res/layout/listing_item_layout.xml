@@ -32,20 +32,20 @@
                 android:id="@+id/textViewName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Item name"
-                android:textSize="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="7dp"
+                android:text="Item name"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textViewPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="7dp"
                 android:text="Item price"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:layout_margin="7dp"/>
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textViewLocation"
@@ -59,7 +59,8 @@
                 android:id="@+id/chat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contact" />
+                android:text="Contact"
+                android:layout_margin="4dp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

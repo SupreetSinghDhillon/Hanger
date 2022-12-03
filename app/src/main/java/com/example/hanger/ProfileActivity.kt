@@ -94,7 +94,9 @@ class ProfileActivity : AppCompatActivity() {
         if(profileImageSelected) {
             val reference =
                 firebaseStorage.reference.child("User Images").child(auth.currentUser!!.uid)
-            reference.putFile(tempUri)
+            reference.putFile(tempUri).addOnCompleteListener {
+                finish()
+            }
         }
     }
 
@@ -118,6 +120,7 @@ class ProfileActivity : AppCompatActivity() {
             if (it != null) {
                 imageChanged = 1
                 profileImageView.setImageURI(it)
+                profileImageSelected = true
 
                 thread {
                     val inputStream = contentResolver.openInputStream(it)

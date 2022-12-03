@@ -109,7 +109,7 @@ class RegisterUserActivity : AppCompatActivity() {
             if (it != null) {
                 imageChanged = 1
                 profileImageView.setImageURI(it)
-
+                profileImageSelected = true
                 thread {
                     val inputStream = contentResolver.openInputStream(it)
                     val outputStream = FileOutputStream(tempUri.path)

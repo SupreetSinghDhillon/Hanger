@@ -25,11 +25,20 @@
         android:layout_marginBottom="25dp"
         app:srcCompat="@drawable/batman" />
 
+    <Button
+        android:id="@+id/changePicture"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:layout_below="@+id/profilePhoto"
+        android:text="Change Picture" />
+
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profilePhoto"
+        android:layout_below="@+id/changePicture"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="25dp"
         android:fontFamily="serif"
@@ -57,6 +66,17 @@
         android:text="Phone Number"
         android:layout_marginBottom="25dp"
         android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:layout_below="@+id/phoneTextView"
+        android:text="Save Changes" />
+
+
 
 
 </RelativeLayout>

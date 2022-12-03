@@ -1,6 +1,7 @@
 package com.example.hanger
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.os.FileUtils
 import android.provider.MediaStore
 import android.view.View
+import android.view.Window
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -32,6 +34,7 @@ class EditMyListingActivity : AppCompatActivity() {
     private lateinit var itemLocation: EditText
     lateinit var storageReference: StorageReference
     private lateinit var itemDesc: EditText
+    lateinit var dialog: Dialog
     lateinit var tempUri: Uri
     var imageChanged: Int = 0
     var profileImageSelected = false
@@ -235,6 +238,8 @@ class EditMyListingActivity : AppCompatActivity() {
         }
     }
     fun updateListingOnClick (view: View) {
+
+        showProgressBar()
         // getting values
         var newListingName = itemName.text.toString()
         var newListingPrice = itemPrice.text.toString()
@@ -265,5 +270,15 @@ class EditMyListingActivity : AppCompatActivity() {
 
     fun cancelEditListingOnClick (view: View) {
         finish()
+    }
+    private fun showProgressBar(){
+        dialog = Dialog(this@EditMyListingActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wait)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+    private fun hideProgressBar(){
+        dialog.dismiss()
     }
 }

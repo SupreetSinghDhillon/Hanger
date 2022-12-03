@@ -1,10 +1,12 @@
 package com.example.hanger
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -79,7 +81,6 @@ class ViewMyListingsActivity : AppCompatActivity() {
 
         // fetching data
 
-        Toast.makeText(this,"HI, I am here",Toast.LENGTH_SHORT).show()
         listOfActiveItemsRecyclerView = findViewById(R.id.myListingsItems)
         listOfActiveItemsRecyclerView.layoutManager = LinearLayoutManager(this)
         listOfActiveItemsRecyclerView.setHasFixedSize(true)
@@ -96,7 +97,6 @@ class ViewMyListingsActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        Toast.makeText(this,"HI, I am here",Toast.LENGTH_SHORT).show()
         listOfActiveItemsRecyclerView = findViewById(R.id.myListingsItems)
         listOfActiveItemsRecyclerView.layoutManager = LinearLayoutManager(this)
         listOfActiveItemsRecyclerView.setHasFixedSize(true)

@@ -90,6 +90,7 @@ class ProfileActivity : AppCompatActivity() {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users")
         if(userID.isNotEmpty()){
+            showProgressBar()
             getUserData()
         }
     }
@@ -185,6 +186,7 @@ class ProfileActivity : AppCompatActivity() {
         storageReference.getFile(localFile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
             profileImageView.setImageBitmap(bitmap)
+            hideProgressBar()
         }
             .addOnFailureListener{
                     Toast.makeText(this,"Image upload failed",Toast.LENGTH_SHORT).show()
@@ -200,4 +202,5 @@ class ProfileActivity : AppCompatActivity() {
     private fun hideProgressBar(){
         dialog.dismiss()
     }
+
 }

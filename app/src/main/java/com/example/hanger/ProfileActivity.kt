@@ -1,5 +1,6 @@
 package com.example.hanger
 import android.app.Activity
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.FileUtils
 import android.provider.MediaStore
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -39,6 +41,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var firebaseStorage: FirebaseStorage
     lateinit var nameView: TextView
     lateinit var emailView: TextView
+    lateinit var dialog: Dialog
     lateinit var phoneView: TextView
     lateinit var tempUri: Uri
     lateinit var saveButton: Button
@@ -76,6 +79,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
+            showProgressBar()
             saveUserInformation()
         }
 
@@ -97,6 +101,9 @@ class ProfileActivity : AppCompatActivity() {
             reference.putFile(tempUri).addOnCompleteListener {
                 finish()
             }
+                .addOnFailureListener {
+                    hideProgressBar()
+                }
         }
     }
 
@@ -182,5 +189,15 @@ class ProfileActivity : AppCompatActivity() {
             .addOnFailureListener{
                     Toast.makeText(this,"Image upload failed",Toast.LENGTH_SHORT).show()
             }
+    }
+    private fun showProgressBar(){
+        dialog = Dialog(this@ProfileActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wait)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+    private fun hideProgressBar(){
+        dialog.dismiss()
     }
 }

@@ -16,14 +16,19 @@
         android:layout_marginBottom="25dp"
         android:textSize="44sp" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePhoto"
         android:layout_width="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/profileTextView"
         android:layout_height="200dp"
-        android:layout_marginBottom="25dp"
-        app:srcCompat="@drawable/batman" />
+        android:layout_below="@+id/profileTextView"
+        android:src="@drawable/batman"
+        app:civ_border_color="#FF000000"
+        android:layout_marginBottom="45dp"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/changePicture"

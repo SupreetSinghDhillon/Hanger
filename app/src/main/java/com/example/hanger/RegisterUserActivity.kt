@@ -1,6 +1,7 @@
 package com.example.hanger
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.os.FileUtils
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
+import android.view.Window
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -44,6 +46,7 @@ class RegisterUserActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
     lateinit var tempUri: Uri
+    lateinit var dialog: Dialog
     var profileImageSelected = false
     lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     lateinit var galleryLauncher: ActivityResultLauncher<String>
@@ -149,6 +152,9 @@ class RegisterUserActivity : AppCompatActivity() {
         }
 
         register.setOnClickListener {
+
+            showProgressBar()
+
             var emailInput: String = email.text.toString()
             var passwordInput: String = password.text.toString()
             var nameInput = name.text.toString()
@@ -210,6 +216,7 @@ class RegisterUserActivity : AppCompatActivity() {
                         startActivity(intent)
 
                     } else {
+                        hideProgressBar()
                         Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
                         Log.d("ERROR", it.exception.toString())
                     }
@@ -221,7 +228,20 @@ class RegisterUserActivity : AppCompatActivity() {
         if(profileImageSelected) {
             val reference =
                 firebaseStorage.reference.child("User Images").child(auth.currentUser!!.uid)
-            reference.putFile(tempUri)
+            reference.putFile(tempUri).addOnCompleteListener {
+                hideProgressBar()
+            }
         }
+    }
+
+    private fun showProgressBar(){
+        dialog = Dialog(this@RegisterUserActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wait)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+    private fun hideProgressBar(){
+        dialog.dismiss()
     }
 }

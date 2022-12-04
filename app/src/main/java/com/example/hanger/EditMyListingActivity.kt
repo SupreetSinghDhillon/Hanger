@@ -1,13 +1,25 @@
 package com.example.hanger
 
+import android.app.Activity
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
+import android.os.FileUtils
+import android.provider.MediaStore
 import android.view.View
+import android.view.Window
 import android.widget.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.example.hanger.model.ListingItemsModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
@@ -16,6 +28,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.File
 import java.util.*
+import java.io.FileOutputStream
+import kotlin.concurrent.thread
 
 
 class EditMyListingActivity : AppCompatActivity() {
@@ -24,9 +38,16 @@ class EditMyListingActivity : AppCompatActivity() {
     private lateinit var itemLocation: EditText
     lateinit var storageReference: StorageReference
     private lateinit var itemDesc: EditText
+    lateinit var dialog: Dialog
+    lateinit var tempUri: Uri
+    var imageChanged: Int = 0
+    var profileImageSelected = false
     private lateinit var itemCategorySpinner: Spinner
     private lateinit var itemInactive: RadioButton
     private lateinit var itemIsActive: RadioButton
+    private lateinit var firebaseStorage: FirebaseStorage
+    lateinit var cameraLauncher: ActivityResultLauncher<Intent>
+    lateinit var galleryLauncher: ActivityResultLauncher<String>
     private lateinit var itemPicture: ImageView
     private lateinit var itemId: String
     private lateinit var textViewStatus: TextView
@@ -60,6 +81,7 @@ class EditMyListingActivity : AppCompatActivity() {
 
         //get db
         database = FirebaseDatabase.getInstance().getReference("Listings")
+        firebaseStorage = FirebaseStorage.getInstance()
         itemId = intent.getStringExtra("itemId")!!
         isEditing = intent.getBooleanExtra("editing", false)
 
@@ -81,6 +103,9 @@ class EditMyListingActivity : AppCompatActivity() {
         btnUpdateListingPicture = findViewById(R.id.buttonUpdateListingPicture)
 
         UserAddListingActivity().createStatesAbb(states)
+        val tempImgFile = File(getExternalFilesDir(null), "temp_image.jpg")
+        tempUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, tempImgFile)
+        galleryCameraLauncher()
 
         if (!isEditing) {
             itemName.isEnabled = false
@@ -121,8 +146,35 @@ class EditMyListingActivity : AppCompatActivity() {
             intent.putExtra("userid", userId)
             this.startActivity(intent)
         }
+        btnUpdateListingPicture.setOnClickListener {
+            showDialog()
+        }
     }
-
+    private fun showDialog(){
+        AlertDialog
+            .Builder(this)
+            .setTitle("Pick Profile Picture")
+            .setPositiveButton(
+                "Open Camera",
+                DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
+                    val cameraStartIntent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    cameraStartIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri)
+                    cameraLauncher.launch(cameraStartIntent)
+                })
+            .setNegativeButton(
+                "Select From Gallery",
+                DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
+                    galleryLauncher.launch("image/*")
+                })
+            .create()
+            .show()
+    }
+    private fun uploadItemPic() {
+        val reference = firebaseStorage.reference.child("Item Images").child(itemId)
+        reference.putFile(tempUri).addOnCompleteListener {
+            finish()
+        }
+    }
     private fun setOriginalValuesToFields () {
         println("debug"+intent.getStringExtra("itemName"))
 
@@ -175,8 +227,44 @@ class EditMyListingActivity : AppCompatActivity() {
             }
         }
     }
+    private fun galleryCameraLauncher(){
 
+        cameraLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { it: ActivityResult ->
+            if (it.resultCode == Activity.RESULT_OK) {
+                imageChanged = 1
+                val imageBitmap = Util.getBitmap(this, tempUri)
+                // finalImageUri = tempUri.toString()
+                itemPicture.setImageBitmap(imageBitmap)
+                profileImageSelected = true
+            }
+        }
+
+        galleryLauncher = registerForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) {
+            if (it != null) {
+                imageChanged = 1
+                itemPicture.setImageURI(it)
+                profileImageSelected = true
+
+                thread {
+                    val inputStream = contentResolver.openInputStream(it)
+                    val outputStream = FileOutputStream(tempUri.path)
+                    //finalImageUri = tempUri.toString()
+                    if (inputStream != null) {
+                        FileUtils.copy(inputStream, outputStream)
+                        inputStream.close()
+                        outputStream.close()
+                    }
+                }
+            }
+        }
+    }
     fun updateListingOnClick (view: View) {
+
+        showProgressBar()
         // getting values
         var newListingName = itemName.text.toString()
         var newListingPrice = itemPrice.text.toString()
@@ -195,8 +283,9 @@ class EditMyListingActivity : AppCompatActivity() {
         database.child(itemId).child("itemCategory").setValue(newListingCategory);
         database.child(itemId).child("itemDesc").setValue(newListingDesc);
         database.child(itemId).child("active").setValue(listingIsActive);
+        uploadItemPic()
 
-        finish()
+        //finish()
     }
 
     fun deleteListingOnClick (view: View) {
@@ -223,5 +312,17 @@ class EditMyListingActivity : AppCompatActivity() {
         println("debug: display is $cityName, $stateName, $countryName")
         itemLocation.setText("$cityName, $stateName, $countryName")
         newListingLocation = "$cityName, $stateName, $countryName"
+    }
+    
+    private fun showProgressBar(){
+        dialog = Dialog(this@EditMyListingActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wait)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+    
+    private fun hideProgressBar(){
+        dialog.dismiss()
     }
 }

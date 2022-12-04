@@ -81,6 +81,7 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
 
     }
 
+
     private fun fetchListings() {
         val category = intent.getIntExtra("CategoryId", 0)
         println("debug: category is $category")

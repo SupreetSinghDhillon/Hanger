@@ -2,16 +2,20 @@ package com.example.hanger
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hanger.model.ListingItemsModel
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.File
+import java.util.*
 
 
 class EditMyListingActivity : AppCompatActivity() {
@@ -41,6 +45,9 @@ class EditMyListingActivity : AppCompatActivity() {
     // private lateinit var updateListing: Button
     // private lateinit var database: DatabaseReference
     private lateinit var userId: String
+    var states: HashMap<String, String> = HashMap<String, String>()
+    private var newListingLocation: String? = null
+    private var newListingLatLng: String? = null
 
 
     // TODO: update the database on update button
@@ -72,6 +79,8 @@ class EditMyListingActivity : AppCompatActivity() {
         btnCancelEditListing = findViewById(R.id.buttonCancelEditListing)
         btnDeleteListing = findViewById(R.id.buttonDeleteListing)
         btnUpdateListingPicture = findViewById(R.id.buttonUpdateListingPicture)
+
+        UserAddListingActivity().createStatesAbb(states)
 
         if (!isEditing) {
             itemName.isEnabled = false
@@ -117,6 +126,8 @@ class EditMyListingActivity : AppCompatActivity() {
     private fun setOriginalValuesToFields () {
         println("debug"+intent.getStringExtra("itemName"))
 
+        newListingLocation = intent.getStringExtra("itemLocation") // in cases of location not modified
+        newListingLatLng = intent.getStringExtra("itemLatlng")
         itemName.setText(intent.getStringExtra("itemName"))
         itemPrice.setText(intent.getStringExtra("itemPrice"))
         itemLocation.setText(intent.getStringExtra("itemLocation"))
@@ -145,15 +156,30 @@ class EditMyListingActivity : AppCompatActivity() {
             }
     }
 
-    private fun setNewValuesToUpdate () {
+    fun selectLocationOnClick (view: View) {
+        val intent: Intent = Intent(this, MapsActivity::class.java)
+        this.startActivityForResult(intent, 0)
+    }
 
+    // get result from map selection
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 0) { // only map calls should give results
+            val retrievedBundle: Bundle? = data?.getParcelableExtra("bundle")
+            val retrievedLatLng: LatLng? = retrievedBundle?.getParcelable("selectedLocation")
+            if (retrievedLatLng != null) {
+                convertToAddress(retrievedLatLng)
+                val lat = retrievedLatLng?.latitude
+                val lng = retrievedLatLng?.longitude
+                newListingLatLng = "$lat,$lng"
+            }
+        }
     }
 
     fun updateListingOnClick (view: View) {
         // getting values
         var newListingName = itemName.text.toString()
         var newListingPrice = itemPrice.text.toString()
-        var newListingLocation = itemLocation.text.toString()
         var newListingDesc = itemDesc.text.toString()
         var newListingCategory = itemCategorySpinner.selectedItemPosition
         if (itemIsActive.isChecked){
@@ -165,6 +191,7 @@ class EditMyListingActivity : AppCompatActivity() {
         database.child(itemId).child("itemName").setValue(newListingName);
         database.child(itemId).child("itemPrice").setValue(newListingPrice);
         database.child(itemId).child("itemLocation").setValue(newListingLocation);
+        database.child(itemId).child("itemLatlng").setValue(newListingLatLng);
         database.child(itemId).child("itemCategory").setValue(newListingCategory);
         database.child(itemId).child("itemDesc").setValue(newListingDesc);
         database.child(itemId).child("active").setValue(listingIsActive);
@@ -179,5 +206,22 @@ class EditMyListingActivity : AppCompatActivity() {
 
     fun cancelEditListingOnClick (view: View) {
         finish()
+    }
+
+    private fun convertToAddress(retrievedLatLng: LatLng){
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = geocoder.getFromLocation(retrievedLatLng!!.latitude, retrievedLatLng!!.longitude, 1)
+        println("debug: $addresses")
+        var cityName = ""
+        if (addresses[0].locality != null) cityName = addresses[0].locality
+        var stateName = ""
+        if (addresses[0].adminArea != null) stateName = addresses[0].adminArea
+        val countryName: String? = addresses[0].countryCode
+        // only assign abbrev if not null in dictionary
+        if (states.get(stateName) != null)  stateName = states.get(stateName).toString()
+        println("debug: returned value is "+retrievedLatLng)
+        println("debug: display is $cityName, $stateName, $countryName")
+        itemLocation.setText("$cityName, $stateName, $countryName")
+        newListingLocation = "$cityName, $stateName, $countryName"
     }
 }

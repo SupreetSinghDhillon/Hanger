@@ -3,6 +3,8 @@ package com.example.hanger
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.os.FileUtils
@@ -21,12 +23,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.hanger.adapters.Util
 import com.example.hanger.model.ListingItemsModel
 import com.example.hanger.model.MyViewModel
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 
 
@@ -40,6 +45,7 @@ class UserAddListingActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var newListingName: String
     private lateinit var newListingPrice: String
+    private lateinit var newListingLatlng: String
     private lateinit var auth: FirebaseAuth
     lateinit var tempUri: Uri
     private lateinit var newListingLocation: String
@@ -53,6 +59,7 @@ class UserAddListingActivity : AppCompatActivity() {
     lateinit var galleryLauncher: ActivityResultLauncher<String>
     private lateinit var inputCategorySpinner: Spinner
     private lateinit var firebaseStorage: FirebaseStorage
+    var statesHM: HashMap<String, String> = HashMap<String, String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,10 +73,11 @@ class UserAddListingActivity : AppCompatActivity() {
         publishListing = findViewById(R.id.buttonPublishListing)
         itemPicture = findViewById(R.id.newItemPicture)
         inputCategorySpinner = findViewById(R.id.editListingCategories)
-        // to do: push logged in user's account onto the table as well so the buyer can contact them
         database = FirebaseDatabase.getInstance().getReference("Listings")
         auth = FirebaseAuth.getInstance()
         firebaseStorage = FirebaseStorage.getInstance()
+
+        createStatesAbb(statesHM) // for retreiving the short forms of province
 
         // only enable button if all the fields are entered
         val editTexts = listOf(itemName, itemPrice, itemLocation)
@@ -148,18 +156,55 @@ class UserAddListingActivity : AppCompatActivity() {
         }
     }
 
+    fun selectLocationOnClick (view: View) {
+        val intent: Intent = Intent(this, MapsActivity::class.java)
+        this.startActivityForResult(intent, 0)
+    }
+
+    // get result from map selection
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 0) { // only map calls should give results
+            val retrievedBundle: Bundle? = data?.getParcelableExtra("bundle")
+            val retrievedLatLng: LatLng? = retrievedBundle?.getParcelable("selectedLocation")
+            if (retrievedLatLng != null) {
+                convertToAddress(retrievedLatLng)
+            }
+            val lat = retrievedLatLng?.latitude
+            val lng = retrievedLatLng?.longitude
+            newListingLatlng = "$lat,$lng"
+        }
+    }
+
+    fun convertToAddress(retrievedLatLng: LatLng): String {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = geocoder.getFromLocation(retrievedLatLng!!.latitude, retrievedLatLng!!.longitude, 1)
+        println("debug: $addresses")
+        var cityName = ""
+        if (addresses[0].locality != null) cityName = addresses[0].locality
+        var stateName = ""
+        if (addresses[0].adminArea != null) stateName = addresses[0].adminArea
+        val countryName: String? = addresses[0].countryCode
+        // only assign abbrev if not null in dictionary
+        if (statesHM.get(stateName) != null)  stateName = statesHM.get(stateName).toString()
+        println("debug: returned value is "+retrievedLatLng)
+        println("debug: display is $cityName, $stateName, $countryName")
+        itemLocation.setText("$cityName, $stateName, $countryName")
+        newListingLocation = "$cityName, $stateName, $countryName"
+        return newListingLocation
+    }
+
     fun publishNewListingOnClick (view: View) {
         // getting values
         newListingName = itemName.text.toString()
         newListingPrice = itemPrice.text.toString()
-        newListingLocation = itemLocation.text.toString()
         newListingDesc = itemDesc.text.toString()
         newListingCategory = inputCategorySpinner.selectedItemPosition
 
         // pushing to listings table
         //val itemId = database.push().key!!
         itemId = database.push().key!!
-        val item = ListingItemsModel(auth.currentUser?.uid, itemId, newListingName, newListingPrice, newListingLocation, newListingDesc, newListingCategory, true)
+        val item = ListingItemsModel(auth.currentUser?.uid, itemId, newListingName, newListingPrice, newListingLocation, newListingLatlng, newListingDesc, newListingCategory, true)
         database.child(itemId).setValue(item).addOnCompleteListener{
             uploadItemPic()
             Toast.makeText(this, "Listing created successfully!", Toast.LENGTH_LONG).show()
@@ -201,5 +246,80 @@ class UserAddListingActivity : AppCompatActivity() {
             .show()
 
 
+    }
+
+    // credit https://stackoverflow.com/questions/26879882/obtaining-state-abbreviation-from-getadminarea
+    fun createStatesAbb (states: HashMap<String, String>) {
+        states.put("Alabama","AL");
+        states.put("Alaska","AK");
+        states.put("Alberta","AB");
+        states.put("American Samoa","AS");
+        states.put("Arizona","AZ");
+        states.put("Arkansas","AR");
+        states.put("Armed Forces (AE)","AE");
+        states.put("Armed Forces Americas","AA");
+        states.put("Armed Forces Pacific","AP");
+        states.put("British Columbia","BC");
+        states.put("California","CA");
+        states.put("Colorado","CO");
+        states.put("Connecticut","CT");
+        states.put("Delaware","DE");
+        states.put("District Of Columbia","DC");
+        states.put("Florida","FL");
+        states.put("Georgia","GA");
+        states.put("Guam","GU");
+        states.put("Hawaii","HI");
+        states.put("Idaho","ID");
+        states.put("Illinois","IL");
+        states.put("Indiana","IN");
+        states.put("Iowa","IA");
+        states.put("Kansas","KS");
+        states.put("Kentucky","KY");
+        states.put("Louisiana","LA");
+        states.put("Maine","ME");
+        states.put("Manitoba","MB");
+        states.put("Maryland","MD");
+        states.put("Massachusetts","MA");
+        states.put("Michigan","MI");
+        states.put("Minnesota","MN");
+        states.put("Mississippi","MS");
+        states.put("Missouri","MO");
+        states.put("Montana","MT");
+        states.put("Nebraska","NE");
+        states.put("Nevada","NV");
+        states.put("New Brunswick","NB");
+        states.put("New Hampshire","NH");
+        states.put("New Jersey","NJ");
+        states.put("New Mexico","NM");
+        states.put("New York","NY");
+        states.put("Newfoundland","NF");
+        states.put("North Carolina","NC");
+        states.put("North Dakota","ND");
+        states.put("Northwest Territories","NT");
+        states.put("Nova Scotia","NS");
+        states.put("Nunavut","NU");
+        states.put("Ohio","OH");
+        states.put("Oklahoma","OK");
+        states.put("Ontario","ON");
+        states.put("Oregon","OR");
+        states.put("Pennsylvania","PA");
+        states.put("Prince Edward Island","PE");
+        states.put("Puerto Rico","PR");
+        states.put("Quebec","PQ");
+        states.put("Rhode Island","RI");
+        states.put("Saskatchewan","SK");
+        states.put("South Carolina","SC");
+        states.put("South Dakota","SD");
+        states.put("Tennessee","TN");
+        states.put("Texas","TX");
+        states.put("Utah","UT");
+        states.put("Vermont","VT");
+        states.put("Virgin Islands","VI");
+        states.put("Virginia","VA");
+        states.put("Washington","WA");
+        states.put("West Virginia","WV");
+        states.put("Wisconsin","WI");
+        states.put("Wyoming","WY");
+        states.put("Yukon Territory","YT");
     }
 }

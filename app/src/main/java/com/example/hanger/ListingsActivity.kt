@@ -123,10 +123,10 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
                         intent.putExtra("itemName", listings[position].itemName)
                         intent.putExtra("itemPrice", listings[position].itemPrice)
                         intent.putExtra("itemLocation", listings[position].itemLocation)
-                        intent.putExtra("itemLatlng", listings[position].itemLatlng)
                         intent.putExtra("itemCategory", listings[position].itemCategory)
                         intent.putExtra("itemDesc", listings[position].itemDesc)
                         intent.putExtra("itemActive", listings[position].isActive)
+                        // TODO: missing put image
                         startActivity(intent)
                     }
                 })

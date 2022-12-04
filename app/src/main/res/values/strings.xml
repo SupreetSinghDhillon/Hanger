@@ -35,4 +35,5 @@
         <item>Price: Low to High</item>
         <item>Price: High to Low</item>
     </string-array>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

@@ -73,6 +73,7 @@ class ListingAdapter (private val itemList: ArrayList<ListingItemsModel>, privat
         val chatButton: Button = itemView.findViewById((R.id.chat))
 
         init {
+            imageView.setImageResource(R.drawable.loading)
             itemView.setOnClickListener{
                 clickListener.onCardClicked(adapterPosition)
             }

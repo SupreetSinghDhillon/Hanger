@@ -17,7 +17,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
+            android:value="AIzaSyD8hFWD1uzNG5c3zDGJZo84JaZyyi5zmZ8" />
 
         <activity
             android:name=".MapsActivity"
@@ -101,7 +101,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
+            android:value="AIzaSyD8hFWD1uzNG5c3zDGJZo84JaZyyi5zmZ8" />
 
         <activity
             android:name=".EditMyListingActivity"

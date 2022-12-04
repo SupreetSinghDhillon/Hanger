@@ -170,8 +170,14 @@ class EditMyListingActivity : AppCompatActivity() {
             .show()
     }
     private fun uploadItemPic() {
-        val reference = firebaseStorage.reference.child("Item Images").child(itemId)
-        reference.putFile(tempUri).addOnCompleteListener {
+        if(profileImageSelected) {
+            val reference = firebaseStorage.reference.child("Item Images").child(itemId)
+            reference.putFile(tempUri).addOnCompleteListener {
+                finish()
+            }
+        }
+        else {
+            hideProgressBar()
             finish()
         }
     }

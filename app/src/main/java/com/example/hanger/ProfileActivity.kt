@@ -189,7 +189,8 @@ class ProfileActivity : AppCompatActivity() {
             hideProgressBar()
         }
             .addOnFailureListener{
-                    Toast.makeText(this,"Image upload failed",Toast.LENGTH_SHORT).show()
+                hideProgressBar()
+                    //Toast.makeText(this,"Image upload failed",Toast.LENGTH_SHORT).show()
             }
     }
     private fun showProgressBar(){

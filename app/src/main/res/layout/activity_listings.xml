@@ -23,7 +23,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="My Active Listings"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 />
 
             <Spinner
@@ -31,17 +31,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewListings"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="196dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:tooltipText="Filters..."
-                />
+                android:minHeight="48dp"
+                android:tooltipText="Filters..." />
+
+            <SeekBar
+                android:id="@+id/seekBarLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="196dp"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/spinnerFilters"
+                android:layout_toStartOf="@id/textViewDistance"
+                android:max="50"
+                android:progress="10"
+                android:min="0"/>
+
+            <TextView
+                android:id="@+id/textViewDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:layout_alignTop="@id/seekBarLocation"
+                android:layout_alignEnd="@id/spinnerFilters" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewListings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinnerFilters"
+                android:layout_below="@+id/seekBarLocation"
                 android:layout_margin="16dp" />
 
 

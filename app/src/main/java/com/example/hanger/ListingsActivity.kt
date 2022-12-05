@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -26,9 +27,10 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    lateinit var toggle: ActionBarDrawerToggle
-    lateinit var mDrawerLayout: DrawerLayout
-    lateinit var mNavView: NavigationView
+
+    private lateinit var seekBarLocation: SeekBar
+    private lateinit var textViewDistance: TextView
+    private var distanceFilter: Int = 10
 
     private lateinit var spinnerFilters: Spinner
     private lateinit var selectedFilter: String
@@ -60,6 +62,9 @@ class ListingsActivity: AppCompatActivity(), AdapterView.OnItemSelectedListener 
             spinnerFilters.adapter = arrayAdapter
             spinnerFilters.onItemSelectedListener = this
         }
+
+        seekBarLocation = findViewById(R.id.seekBarLocation)
+
 
         recyclerViewListings = findViewById(R.id.recyclerViewListings)
         recyclerViewListings.layoutManager = LinearLayoutManager(this)

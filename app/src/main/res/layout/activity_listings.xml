@@ -45,7 +45,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_below="@+id/spinnerFilters"
                 android:layout_toStartOf="@id/textViewDistance"
-                android:max="50"
+                android:max="55"
                 android:progress="10"
                 android:min="0"/>
 
@@ -53,7 +53,7 @@
                 android:id="@+id/textViewDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="10 km"
                 android:layout_alignTop="@id/seekBarLocation"
                 android:layout_alignEnd="@id/spinnerFilters" />
 

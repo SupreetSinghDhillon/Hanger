@@ -65,4 +65,7 @@ dependencies {
     //Progress Dialog Library
     implementation 'com.jpardogo.googleprogressbar:library:1.2.0'
 
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.google.firebase:firebase-messaging:23.1.0'
 }

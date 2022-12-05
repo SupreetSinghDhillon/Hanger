@@ -57,6 +57,7 @@ class EditMyListingActivity : AppCompatActivity() {
     private lateinit var btnCancelEditListing: Button
     private lateinit var btnDeleteListing: Button
     private lateinit var btnUpdateListingPicture: Button
+    private lateinit var btnUpdateLocation: Button
 
     private var isEditing: Boolean = false
 
@@ -101,6 +102,7 @@ class EditMyListingActivity : AppCompatActivity() {
         btnCancelEditListing = findViewById(R.id.buttonCancelEditListing)
         btnDeleteListing = findViewById(R.id.buttonDeleteListing)
         btnUpdateListingPicture = findViewById(R.id.buttonUpdateListingPicture)
+        btnUpdateLocation = findViewById(R.id.buttonSelectLocation)
 
         UserAddListingActivity().createStatesAbb(states)
         val tempImgFile = File(getExternalFilesDir(null), "temp_image.jpg")
@@ -123,6 +125,7 @@ class EditMyListingActivity : AppCompatActivity() {
             btnUpdateListing.visibility = View.INVISIBLE
             btnCancelEditListing.visibility = View.INVISIBLE
             btnDeleteListing.visibility = View.INVISIBLE
+            btnUpdateLocation.visibility = View.INVISIBLE
         } else {
             itemName.isEnabled = true
             itemPrice.isEnabled = true
@@ -138,6 +141,7 @@ class EditMyListingActivity : AppCompatActivity() {
             btnUpdateListing.visibility = View.VISIBLE
             btnCancelEditListing.visibility = View.VISIBLE
             btnDeleteListing.visibility = View.VISIBLE
+            btnUpdateLocation.visibility = View.VISIBLE
         }
 
         setOriginalValuesToFields()

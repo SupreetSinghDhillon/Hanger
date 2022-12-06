@@ -35,5 +35,11 @@
         <item>Price: Low to High</item>
         <item>Price: High to Low</item>
     </string-array>
-    <string name="title_activity_maps">MapsActivity</string>
+
+   <string name="email">Email Address:</string>
+    <string name="pass">Password:</string>
+    <string name="login">Log In</string>
+    <string name="register">Sign Up Now!</string>
+    <string name="fpass">Forgot Password</string>
+
 </resources>

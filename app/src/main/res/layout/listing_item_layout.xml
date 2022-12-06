@@ -21,6 +21,7 @@
             android:id="@+id/imageViewPicture"
             android:layout_width="150dp"
             android:layout_height="match_parent"
+            
             tools:src="@drawable/ic_baseline_image_24" />
 
         <LinearLayout
@@ -33,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="28dp"
                 android:layout_marginRight="7dp"
                 android:text="Item name"
                 android:textSize="16sp" />
@@ -55,12 +56,6 @@
                 android:layout_margin="7dp"
                 android:maxLines="1" />
 
-            <Button
-                android:id="@+id/chat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Contact"
-                android:layout_margin="4dp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

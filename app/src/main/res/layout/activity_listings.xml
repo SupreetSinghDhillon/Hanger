@@ -23,25 +23,50 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="My Active Listings"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 />
 
-            <Spinner
-                android:id="@+id/spinnerFilters"
+            <LinearLayout
+                android:id="@+id/filterLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewListings"
+                android:orientation="horizontal"
+                android:layout_below="@id/textViewListings"
                 android:layout_marginTop="16dp"
-                android:layout_marginStart="196dp"
-                android:layout_marginEnd="16dp"
-                android:tooltipText="Filters..."
-                />
+                android:layout_marginHorizontal="8dp">
+                <SeekBar
+                    android:id="@+id/seekBarLocation"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:max="55"
+                    android:progress="10"
+                    android:min="0"
+                    android:layout_gravity="start|center_vertical"
+                    />
+
+                <TextView
+                    android:id="@+id/textViewDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10 km"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginEnd="8dp"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinnerFilters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:tooltipText="Filters..."
+                    android:layout_gravity="right"/>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewListings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinnerFilters"
+                android:layout_below="@+id/filterLayout"
                 android:layout_margin="16dp" />
 
 

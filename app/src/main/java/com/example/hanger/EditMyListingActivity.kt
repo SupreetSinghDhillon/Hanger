@@ -1,17 +1,35 @@
 package com.example.hanger
 
+import android.app.Activity
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.location.Address
+import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
+import android.os.FileUtils
+import android.provider.MediaStore
 import android.view.View
+import android.view.Window
 import android.widget.*
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.example.hanger.model.ListingItemsModel
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.File
+import java.util.*
+import java.io.FileOutputStream
+import kotlin.concurrent.thread
 
 
 class EditMyListingActivity : AppCompatActivity() {
@@ -20,9 +38,16 @@ class EditMyListingActivity : AppCompatActivity() {
     private lateinit var itemLocation: EditText
     lateinit var storageReference: StorageReference
     private lateinit var itemDesc: EditText
+    lateinit var dialog: Dialog
+    lateinit var tempUri: Uri
+    var imageChanged: Int = 0
+    var profileImageSelected = false
     private lateinit var itemCategorySpinner: Spinner
     private lateinit var itemInactive: RadioButton
     private lateinit var itemIsActive: RadioButton
+    private lateinit var firebaseStorage: FirebaseStorage
+    lateinit var cameraLauncher: ActivityResultLauncher<Intent>
+    lateinit var galleryLauncher: ActivityResultLauncher<String>
     private lateinit var itemPicture: ImageView
     private lateinit var itemId: String
     private lateinit var textViewStatus: TextView
@@ -32,6 +57,7 @@ class EditMyListingActivity : AppCompatActivity() {
     private lateinit var btnCancelEditListing: Button
     private lateinit var btnDeleteListing: Button
     private lateinit var btnUpdateListingPicture: Button
+    private lateinit var btnUpdateLocation: Button
 
     private var isEditing: Boolean = false
 
@@ -41,6 +67,9 @@ class EditMyListingActivity : AppCompatActivity() {
     // private lateinit var updateListing: Button
     // private lateinit var database: DatabaseReference
     private lateinit var userId: String
+    var states: HashMap<String, String> = HashMap<String, String>()
+    private var newListingLocation: String? = null
+    private var newListingLatLng: String? = null
 
 
     // TODO: update the database on update button
@@ -53,6 +82,7 @@ class EditMyListingActivity : AppCompatActivity() {
 
         //get db
         database = FirebaseDatabase.getInstance().getReference("Listings")
+        firebaseStorage = FirebaseStorage.getInstance()
         itemId = intent.getStringExtra("itemId")!!
         isEditing = intent.getBooleanExtra("editing", false)
 
@@ -72,6 +102,12 @@ class EditMyListingActivity : AppCompatActivity() {
         btnCancelEditListing = findViewById(R.id.buttonCancelEditListing)
         btnDeleteListing = findViewById(R.id.buttonDeleteListing)
         btnUpdateListingPicture = findViewById(R.id.buttonUpdateListingPicture)
+        btnUpdateLocation = findViewById(R.id.buttonSelectLocation)
+
+        UserAddListingActivity().createStatesAbb(states)
+        val tempImgFile = File(getExternalFilesDir(null), "temp_image.jpg")
+        tempUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, tempImgFile)
+        galleryCameraLauncher()
 
         if (!isEditing) {
             itemName.isEnabled = false
@@ -89,6 +125,7 @@ class EditMyListingActivity : AppCompatActivity() {
             btnUpdateListing.visibility = View.INVISIBLE
             btnCancelEditListing.visibility = View.INVISIBLE
             btnDeleteListing.visibility = View.INVISIBLE
+            btnUpdateLocation.visibility = View.INVISIBLE
         } else {
             itemName.isEnabled = true
             itemPrice.isEnabled = true
@@ -104,6 +141,7 @@ class EditMyListingActivity : AppCompatActivity() {
             btnUpdateListing.visibility = View.VISIBLE
             btnCancelEditListing.visibility = View.VISIBLE
             btnDeleteListing.visibility = View.VISIBLE
+            btnUpdateLocation.visibility = View.VISIBLE
         }
 
         setOriginalValuesToFields()
@@ -112,11 +150,46 @@ class EditMyListingActivity : AppCompatActivity() {
             intent.putExtra("userid", userId)
             this.startActivity(intent)
         }
+        btnUpdateListingPicture.setOnClickListener {
+            showDialog()
+        }
     }
-
+    private fun showDialog(){
+        AlertDialog
+            .Builder(this)
+            .setTitle("Pick Profile Picture")
+            .setPositiveButton(
+                "Open Camera",
+                DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
+                    val cameraStartIntent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    cameraStartIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri)
+                    cameraLauncher.launch(cameraStartIntent)
+                })
+            .setNegativeButton(
+                "Select From Gallery",
+                DialogInterface.OnClickListener { _: DialogInterface, _: Int ->
+                    galleryLauncher.launch("image/*")
+                })
+            .create()
+            .show()
+    }
+    private fun uploadItemPic() {
+        if(profileImageSelected) {
+            val reference = firebaseStorage.reference.child("Item Images").child(itemId)
+            reference.putFile(tempUri).addOnCompleteListener {
+                finish()
+            }
+        }
+        else {
+            hideProgressBar()
+            finish()
+        }
+    }
     private fun setOriginalValuesToFields () {
         println("debug"+intent.getStringExtra("itemName"))
 
+        newListingLocation = intent.getStringExtra("itemLocation") // in cases of location not modified
+        newListingLatLng = intent.getStringExtra("itemLatlng")
         itemName.setText(intent.getStringExtra("itemName"))
         itemPrice.setText(intent.getStringExtra("itemPrice"))
         itemLocation.setText(intent.getStringExtra("itemLocation"))
@@ -145,15 +218,66 @@ class EditMyListingActivity : AppCompatActivity() {
             }
     }
 
-    private fun setNewValuesToUpdate () {
-
+    fun selectLocationOnClick (view: View) {
+        val intent: Intent = Intent(this, MapsActivity::class.java)
+        this.startActivityForResult(intent, 0)
     }
 
+    // get result from map selection
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 0) { // only map calls should give results
+            val retrievedBundle: Bundle? = data?.getParcelableExtra("bundle")
+            val retrievedLatLng: LatLng? = retrievedBundle?.getParcelable("selectedLocation")
+            if (retrievedLatLng != null) {
+                convertToAddress(retrievedLatLng)
+                val lat = retrievedLatLng?.latitude
+                val lng = retrievedLatLng?.longitude
+                newListingLatLng = "$lat,$lng"
+            }
+        }
+    }
+    private fun galleryCameraLauncher(){
+
+        cameraLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { it: ActivityResult ->
+            if (it.resultCode == Activity.RESULT_OK) {
+                imageChanged = 1
+                val imageBitmap = Util.getBitmap(this, tempUri)
+                // finalImageUri = tempUri.toString()
+                itemPicture.setImageBitmap(imageBitmap)
+                profileImageSelected = true
+            }
+        }
+
+        galleryLauncher = registerForActivityResult(
+            ActivityResultContracts.GetContent()
+        ) {
+            if (it != null) {
+                imageChanged = 1
+                itemPicture.setImageURI(it)
+                profileImageSelected = true
+
+                thread {
+                    val inputStream = contentResolver.openInputStream(it)
+                    val outputStream = FileOutputStream(tempUri.path)
+                    //finalImageUri = tempUri.toString()
+                    if (inputStream != null) {
+                        FileUtils.copy(inputStream, outputStream)
+                        inputStream.close()
+                        outputStream.close()
+                    }
+                }
+            }
+        }
+    }
     fun updateListingOnClick (view: View) {
+
+        showProgressBar()
         // getting values
         var newListingName = itemName.text.toString()
         var newListingPrice = itemPrice.text.toString()
-        var newListingLocation = itemLocation.text.toString()
         var newListingDesc = itemDesc.text.toString()
         var newListingCategory = itemCategorySpinner.selectedItemPosition
         if (itemIsActive.isChecked){
@@ -165,11 +289,13 @@ class EditMyListingActivity : AppCompatActivity() {
         database.child(itemId).child("itemName").setValue(newListingName);
         database.child(itemId).child("itemPrice").setValue(newListingPrice);
         database.child(itemId).child("itemLocation").setValue(newListingLocation);
+        database.child(itemId).child("itemLatlng").setValue(newListingLatLng);
         database.child(itemId).child("itemCategory").setValue(newListingCategory);
         database.child(itemId).child("itemDesc").setValue(newListingDesc);
         database.child(itemId).child("active").setValue(listingIsActive);
+        uploadItemPic()
 
-        finish()
+        //finish()
     }
 
     fun deleteListingOnClick (view: View) {
@@ -179,5 +305,34 @@ class EditMyListingActivity : AppCompatActivity() {
 
     fun cancelEditListingOnClick (view: View) {
         finish()
+    }
+
+    private fun convertToAddress(retrievedLatLng: LatLng){
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = geocoder.getFromLocation(retrievedLatLng!!.latitude, retrievedLatLng!!.longitude, 1)
+        println("debug: $addresses")
+        var cityName = ""
+        if (addresses[0].locality != null) cityName = addresses[0].locality
+        var stateName = ""
+        if (addresses[0].adminArea != null) stateName = addresses[0].adminArea
+        val countryName: String? = addresses[0].countryCode
+        // only assign abbrev if not null in dictionary
+        if (states.get(stateName) != null)  stateName = states.get(stateName).toString()
+        println("debug: returned value is "+retrievedLatLng)
+        println("debug: display is $cityName, $stateName, $countryName")
+        itemLocation.setText("$cityName, $stateName, $countryName")
+        newListingLocation = "$cityName, $stateName, $countryName"
+    }
+    
+    private fun showProgressBar(){
+        dialog = Dialog(this@EditMyListingActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wait)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
+    }
+    
+    private fun hideProgressBar(){
+        dialog.dismiss()
     }
 }

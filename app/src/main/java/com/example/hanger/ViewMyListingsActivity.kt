@@ -1,10 +1,13 @@
 package com.example.hanger
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,6 +80,7 @@ class ViewMyListingsActivity : AppCompatActivity() {
 //        }
 
         // fetching data
+
         listOfActiveItemsRecyclerView = findViewById(R.id.myListingsItems)
         listOfActiveItemsRecyclerView.layoutManager = LinearLayoutManager(this)
         listOfActiveItemsRecyclerView.setHasFixedSize(true)
@@ -90,6 +94,22 @@ class ViewMyListingsActivity : AppCompatActivity() {
         inactiveItemList = arrayListOf<ListingItemsModel>()
         fetchListings()
 
+    }
+
+    override fun onResume() {
+        listOfActiveItemsRecyclerView = findViewById(R.id.myListingsItems)
+        listOfActiveItemsRecyclerView.layoutManager = LinearLayoutManager(this)
+        listOfActiveItemsRecyclerView.setHasFixedSize(true)
+
+        // fetching data for inactive
+        listOfInactiveItemsRecyclerView = findViewById(R.id.myInactiveListingsItems)
+        listOfInactiveItemsRecyclerView.layoutManager = LinearLayoutManager(this)
+        listOfInactiveItemsRecyclerView.setHasFixedSize(true)
+
+        activeItemList = arrayListOf<ListingItemsModel>()
+        inactiveItemList = arrayListOf<ListingItemsModel>()
+        fetchListings()
+        super.onResume()
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(toggle.onOptionsItemSelected(item)){
@@ -147,6 +167,7 @@ class ViewMyListingsActivity : AppCompatActivity() {
                             myIntent.putExtra("itemName", activeItemList[position].itemName)
                             myIntent.putExtra("itemPrice", activeItemList[position].itemPrice)
                             myIntent.putExtra("itemLocation", activeItemList[position].itemLocation)
+                            myIntent.putExtra("itemLatlng", activeItemList[position].itemLatlng)
                             myIntent.putExtra("itemCategory", activeItemList[position].itemCategory)
                             myIntent.putExtra("itemDesc", activeItemList[position].itemDesc)
                             myIntent.putExtra("itemActive", activeItemList[position].isActive)
@@ -166,6 +187,7 @@ class ViewMyListingsActivity : AppCompatActivity() {
                             myIntent.putExtra("itemName", inactiveItemList[position].itemName)
                             myIntent.putExtra("itemPrice", inactiveItemList[position].itemPrice)
                             myIntent.putExtra("itemLocation", inactiveItemList[position].itemLocation)
+                            myIntent.putExtra("itemLatlng", activeItemList[position].itemLatlng)
                             myIntent.putExtra("itemCategory", inactiveItemList[position].itemCategory)
                             myIntent.putExtra("itemDesc", inactiveItemList[position].itemDesc)
                             myIntent.putExtra("itemActive", inactiveItemList[position].isActive)

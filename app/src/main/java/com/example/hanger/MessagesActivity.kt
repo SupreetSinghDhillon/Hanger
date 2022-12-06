@@ -2,24 +2,27 @@ package com.example.hanger
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.renderscript.Sampler.Value
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hanger.Notifications.Token
 import com.example.hanger.adapters.UserListAdapter
+import com.example.hanger.model.Chatlist
 import com.example.hanger.model.Message
 import com.example.hanger.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MessagesActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: UserListAdapter
     private val users: ArrayList<User> = arrayListOf()
-    private val userIdList = arrayListOf<String>()
-
-    private lateinit var ref: DatabaseReference
-    private lateinit var userDb: DatabaseReference
+    private val usersList = arrayListOf<Chatlist>()
+    private lateinit var currentUser: FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,49 +32,56 @@ class MessagesActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         getUsersWithChats()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if(it.isComplete){
+                updateToken(it.result.toString())
+            }
+        }
 
     }
 
     private fun getUsersWithChats() {
-        val currentUser = FirebaseAuth.getInstance().currentUser!!
+        currentUser = FirebaseAuth.getInstance().currentUser!!
 
-        ref = FirebaseDatabase.getInstance().getReference("Chats")
-        ref.addValueEventListener(object : ValueEventListener{
+        val ref: DatabaseReference = FirebaseDatabase.getInstance()
+            .getReference("Chatlist").child(currentUser.uid)
+        ref.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                users.clear()
-                for(messageData: DataSnapshot in snapshot.children) {
-                    val message: Message = messageData.getValue<Message>() as Message
-                    if (message.sender == currentUser.uid && !userIdList.contains(message.receiver)) {
-                        userIdList.add(message.receiver!!)
-                    } else if (message.receiver == currentUser.uid && !userIdList.contains(message.sender)) {
-                        userIdList.add(message.sender!!)
-                    }
+                usersList.clear()
+                for(data: DataSnapshot in snapshot.children) {
+                    val chatlist = data.getValue<Chatlist>() as Chatlist
+                    usersList.add(chatlist)
                 }
-                getUsers()
+                chatList()
             }
-
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
-
         })
 
     }
 
-    private fun getUsers() {
-        userDb = FirebaseDatabase.getInstance().getReference("Users")
-        val context  = this
+    private fun updateToken(tokenStr: String) {
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference("Tokens")
+        val token = Token(tokenStr)
+        ref.child(currentUser.uid).setValue(token)
+    }
 
-        userDb.addValueEventListener(object: ValueEventListener{
+    private fun chatList() {
+        val userRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
+        val context  = this
+        userRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 users.clear()
-                for(userData: DataSnapshot in snapshot.children) {
-                    val user: User = userData.getValue<User>() as User
-
-                    if(userIdList.contains(user.id) && !users.contains(user)) {
-                        users.add(user)
+                for(data: DataSnapshot in snapshot.children) {
+                    val user: User = data.getValue<User>() as User
+                    for(chatList: Chatlist in usersList) {
+                        if (user.id == chatList.id) {
+                            users.add(user)
+                        }
                     }
                 }
+
                 adapter = UserListAdapter(users, context)
                 recyclerView.adapter = adapter
             }
@@ -82,4 +92,6 @@ class MessagesActivity : AppCompatActivity() {
 
         })
     }
+
+
 }

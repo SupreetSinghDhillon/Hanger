@@ -51,13 +51,13 @@ class ListingAdapter (private val itemList: ArrayList<ListingItemsModel>, privat
            // Toast.makeText(this,"Image upload failed", Toast.LENGTH_SHORT).show()
         }
 
-        holder.chatButton.setOnClickListener(object: View.OnClickListener {
-            override fun onClick(p0: View?) {
-                val intent: Intent = Intent(context, MessageActivity::class.java)
-                intent.putExtra("userid", currItem.userId)
-                context.startActivity(intent)
-            }
-        })
+//        holder.chatButton.setOnClickListener(object: View.OnClickListener {
+//            override fun onClick(p0: View?) {
+//                val intent: Intent = Intent(context, MessageActivity::class.java)
+//                intent.putExtra("userid", currItem.userId)
+//                context.startActivity(intent)
+//            }
+//        })
     }
 
     override fun getItemCount(): Int {
@@ -70,9 +70,10 @@ class ListingAdapter (private val itemList: ArrayList<ListingItemsModel>, privat
         val tvItemPrice: TextView = itemView.findViewById(R.id.textViewPrice)
         val tvItemLocation: TextView = itemView.findViewById(R.id.textViewLocation)
         val imageView: ImageView = itemView.findViewById(R.id.imageViewPicture)
-        val chatButton: Button = itemView.findViewById((R.id.chat))
+//        val chatButton: Button = itemView.findViewById((R.id.chat))
 
         init {
+            imageView.setImageResource(R.drawable.loading)
             itemView.setOnClickListener{
                 clickListener.onCardClicked(adapterPosition)
             }

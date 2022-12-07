@@ -8,4 +8,4 @@
 ## Show and tell 1
 [Link for show and tell 1](https://youtu.be/6Z98LNwO-V0)
 ## Final Show and tell
-[Link for final show and tell]()
+[Link for final show and tell](https://youtu.be/709_l0OYxrk)

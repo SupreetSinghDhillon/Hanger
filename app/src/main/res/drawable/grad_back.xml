@@ -9,7 +9,7 @@
                 android:type="linear">
             </gradient>
             <corners
-                android:radius="10dp">
+                android:radius="1dp">
             </corners>
         </shape>
     </item>

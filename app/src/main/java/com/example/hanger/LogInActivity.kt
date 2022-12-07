@@ -47,10 +47,8 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
-
-
        // setUpWallpaper()
-        FirebaseUtil.initializeFirebase()
+
         initialize()  //set up variables
 
         Util.checkPermissions(this)
@@ -150,8 +148,8 @@ class LogInActivity : AppCompatActivity() {
         password = findViewById(R.id.editTextTextPassword)
         logIn = findViewById(R.id.button)
         progressDialog = findViewById(R.id.progressBar)
-//        auth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
         register = findViewById(R.id.registerTextView)
-//        currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser = FirebaseAuth.getInstance().currentUser
     }
 }

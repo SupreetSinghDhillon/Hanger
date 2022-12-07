@@ -39,8 +39,9 @@
    <string name="email">Email Address:</string>
     <string name="pass">Password:</string>
     <string name="login">Log In</string>
+    <string name="question">Not yet a user?</string>
     <string name="register">Sign Up Now!</string>
-    <string name="fpass">Forgot Password</string>
+    <string name="fpass">Forgot Password?</string>
 
     <string name="title_activity_maps">Map Activity</string>
 

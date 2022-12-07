@@ -55,6 +55,7 @@
             android:id="@+id/text_send"
             android:background="@android:color/transparent"
             android:hint="Type a message..."
+            android:textColor="@color/teal_700"
             android:layout_toStartOf="@id/btn_send"
             android:layout_centerVertical="true"/>
 

@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/loginActivity"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -29,7 +29,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="25dp"
             android:ems="10"
-            android:hint="@string/email"
+            android:hint="Email Address"
             android:inputType="textEmailAddress"
             android:textSize="24sp" />
 
@@ -41,21 +41,19 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="25dp"
             android:ems="10"
-            android:hint="@string/pass"
+            android:hint="Password"
             android:inputType="textPassword"
             android:textSize="24sp" />
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/editTextTextPassword"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="25dp"
-            android:text="@string/login"
-            android:textColor="#FFF"
-            android:background="@drawable/grad_back"
-            android:textSize="20sp" />
+            android:text="Log In"
+            android:textSize="24sp" />
 
 
         <TextView
@@ -65,7 +63,7 @@
             android:layout_below="@+id/button"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="25dp"
-            android:text="@string/register"
+            android:text="Register"
             android:textSize="20sp" />
 
         <TextView
@@ -75,7 +73,7 @@
             android:layout_below="@+id/registerTextView"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
-            android:text="@string/fpass"
+            android:text="Forgot Password"
             android:textSize="20sp" />
 
     <ProgressBar

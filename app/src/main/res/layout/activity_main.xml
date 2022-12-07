@@ -12,11 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numColumns="2"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"/>
+        android:horizontalSpacing="4dp"
+        android:verticalSpacing="4dp"/>
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"

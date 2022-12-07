@@ -1,6 +1,14 @@
 # Hanger
 362 Project
 
+## Code Requirements:
+Min APK of 31
+
+##Things we wish we had more time for:
+Currently the messages activity does not show a users message to another user until they reply back
+UI - Spacing of our Navigation window could be improved 
+Implementing Co-Routines in our messaging and listing activities would improve our apps speed
+
 ## Project Pitch
 [Link for project pitch](https://www.youtube.com/watch?v=w9vvzacZVww)
 ## Show and Tell 2

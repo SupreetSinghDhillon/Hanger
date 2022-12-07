@@ -42,6 +42,4 @@
     <string name="register">Sign Up Now!</string>
     <string name="fpass">Forgot Password</string>
 
-    <string name="title_activity_maps">Map Activity</string>
-
 </resources>
